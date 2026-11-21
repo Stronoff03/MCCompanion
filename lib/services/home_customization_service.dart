@@ -102,6 +102,26 @@ class HomeCustomizationService extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setNavOuterLive(AppFeature? feature) {
+    _navOuter = feature;
+    notifyListeners();
+  }
+
+  void setNavFarLive(AppFeature? feature) {
+    _navFar = feature;
+    notifyListeners();
+  }
+
+  void setNavLeftLive(AppFeature? feature) {
+    _navLeft = feature;
+    notifyListeners();
+  }
+
+  void setNavRightLive(AppFeature? feature) {
+    _navRight = feature;
+    notifyListeners();
+  }
+
   Future<void> saveNavOuter(AppFeature? feature) async {
     _navOuter = feature;
     final prefs = await SharedPreferences.getInstance();

@@ -11,6 +11,7 @@ import 'services/locale_provider.dart';
 import 'services/home_customization_service.dart';
 import 'services/theme_service.dart';
 import 'services/distribution_service.dart';
+import 'widgets/pixel_art/pixel_art.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +24,8 @@ void main() async {
   await loadSavedLocale();
   await HomeCustomizationService.instance.load();
   await ThemeService.instance.load();
+  await PixelArtSettings.instance.load();
+  PixelSpriteCache.instance.preloadCoreAssets().ignore();
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(

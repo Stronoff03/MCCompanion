@@ -2010,4 +2010,126 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get feedbackRpNotice =>
       '我们不会回复与资源包相关的反馈。有些资源包本来就无法使用，也有些服务器会拒绝自定义资源包。';
+
+  @override
+  String get pixelStatusReady => '就绪';
+
+  @override
+  String get pixelStatusPortalActive => '传送门已开启';
+
+  @override
+  String get relayRegionEuropeTag => '欧洲 • EU';
+
+  @override
+  String get relayRegionAmericaTag => '美洲 • US';
+
+  @override
+  String get relayRegionDefaultTag => '中继服务器';
+
+  @override
+  String get pixelAtmosphereSection => '像素氛围';
+
+  @override
+  String get pixelAnimationsTitle => '像素动画';
+
+  @override
+  String get pixelAnimationsSubtitle => '动态地平线风景、定制像素图标、附魔符文与传送门特效';
+
+  @override
+  String get pixelAmbientBeesTitle => '环境蜜蜂';
+
+  @override
+  String get pixelAmbientBeesSubtitle => '在空白区域悠闲飞舞的互动 Minecraft 蜜蜂';
+
+  @override
+  String get pixelAutoTimeTitle => '按时间自动切换背景';
+
+  @override
+  String pixelAutoTimeActiveSubtitle(String biome) {
+    return '随时间自动变化 · 当前：$biome';
+  }
+
+  @override
+  String get pixelAutoTimeInactiveSubtitle => '根据本地时间在黎明、白天、黄昏与夜晚间自动切换';
+
+  @override
+  String get pixelBiomeSection => '背景生物群系';
+
+  @override
+  String get pixelBiomeAutoHint => '· 自动（点击可固定）';
+
+  @override
+  String get pixelBiomeAutoLabel => '实时时段';
+
+  @override
+  String get pixelBiomeAutoSubtitle => '黎明、正午、黄昏、夜晚';
+
+  @override
+  String get pixelBiomeMorningLabel => '清晨微光';
+
+  @override
+  String get pixelBiomeMorningSubtitle => '日出与雾村';
+
+  @override
+  String get pixelBiomeDaylightLabel => '白昼山谷';
+
+  @override
+  String get pixelBiomeDaylightSubtitle => '流云与风车';
+
+  @override
+  String get pixelBiomeSunsetLabel => '黄昏村庄';
+
+  @override
+  String get pixelBiomeSunsetSubtitle => '暮色与钟楼';
+
+  @override
+  String get pixelBiomeNightLabel => '夜色森林';
+
+  @override
+  String get pixelBiomeNightSubtitle => '信标金字塔与湖泊';
+
+  @override
+  String get pixelBiomeNetherLabel => '绯红下界';
+
+  @override
+  String get pixelBiomeNetherSubtitle => '古老传送门与要塞';
+
+  @override
+  String get pixelBiomeEndLabel => '末地虚空';
+
+  @override
+  String get pixelBiomeEndSubtitle => '末地水晶与龙蛋';
+
+  @override
+  String get serverPixelIconSection => '服务器像素图标';
+
+  @override
+  String get serverIconGrass => '草方块';
+
+  @override
+  String get serverIconCampfire => '营火';
+
+  @override
+  String get serverIconLantern => '灯笼';
+
+  @override
+  String get serverIconChest => '箱子';
+
+  @override
+  String get serverIconBook => '附魔书';
+
+  @override
+  String get serverIconSword => '钻石剑';
+
+  @override
+  String get serverIconPickaxe => '钻石镐';
+
+  @override
+  String get serverIconCrown => '皇冠';
+
+  @override
+  String get serverIconPortal => '传送门';
+
+  @override
+  String get serverIconCreeper => '苦力怕';
 }

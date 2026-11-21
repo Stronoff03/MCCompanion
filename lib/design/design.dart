@@ -6,3 +6,4 @@ export 'ds_scroll.dart';
 export 'ds_surface.dart';
 export 'ds_tile.dart';
 export 'ds_tokens.dart';
+export 'pixel_chrome.dart';

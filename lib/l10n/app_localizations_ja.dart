@@ -2021,4 +2021,126 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get feedbackRpNotice =>
       'リソースパックに関する報告には返信しておりません。一部のパックは単に動作しないことがあり、サーバーがカスタムパックを拒否する場合もあります。';
+
+  @override
+  String get pixelStatusReady => '準備完了';
+
+  @override
+  String get pixelStatusPortalActive => 'ポータル稼働中';
+
+  @override
+  String get relayRegionEuropeTag => 'ヨーロッパ • EU';
+
+  @override
+  String get relayRegionAmericaTag => 'アメリカ • US';
+
+  @override
+  String get relayRegionDefaultTag => 'リレーサーバー';
+
+  @override
+  String get pixelAtmosphereSection => 'ピクセル雰囲気';
+
+  @override
+  String get pixelAnimationsTitle => 'ピクセルアニメーション';
+
+  @override
+  String get pixelAnimationsSubtitle => '動きのある地平線、専用ピクセルアイコン、ルーン、ポータル演出';
+
+  @override
+  String get pixelAmbientBeesTitle => '環境ミツバチ';
+
+  @override
+  String get pixelAmbientBeesSubtitle => '空きスペースを穏やかに飛び回るインタラクティブなミツバチ';
+
+  @override
+  String get pixelAutoTimeTitle => '時間帯に応じた自動背景';
+
+  @override
+  String pixelAutoTimeActiveSubtitle(String biome) {
+    return '時刻に合わせて自動切替 · 現在: $biome';
+  }
+
+  @override
+  String get pixelAutoTimeInactiveSubtitle => '現在時刻に合わせて夜明け・昼・夕暮れ・夜を自動で切り替えます';
+
+  @override
+  String get pixelBiomeSection => '背景バイオーム';
+
+  @override
+  String get pixelBiomeAutoHint => '· 自動（選択すると固定）';
+
+  @override
+  String get pixelBiomeAutoLabel => '時間帯';
+
+  @override
+  String get pixelBiomeAutoSubtitle => '朝・昼・夕方・夜';
+
+  @override
+  String get pixelBiomeMorningLabel => '朝の夜明け';
+
+  @override
+  String get pixelBiomeMorningSubtitle => '日の出と霧の村';
+
+  @override
+  String get pixelBiomeDaylightLabel => '昼の渓谷';
+
+  @override
+  String get pixelBiomeDaylightSubtitle => '雲と風車';
+
+  @override
+  String get pixelBiomeSunsetLabel => '夕暮れの村';
+
+  @override
+  String get pixelBiomeSunsetSubtitle => '黄昏と鐘楼';
+
+  @override
+  String get pixelBiomeNightLabel => '夜の森';
+
+  @override
+  String get pixelBiomeNightSubtitle => 'ビーコンと湖';
+
+  @override
+  String get pixelBiomeNetherLabel => '真紅のネザー';
+
+  @override
+  String get pixelBiomeNetherSubtitle => '古代ポータルと要塞';
+
+  @override
+  String get pixelBiomeEndLabel => 'エンドの虚無';
+
+  @override
+  String get pixelBiomeEndSubtitle => 'エンドクリスタルと卵';
+
+  @override
+  String get serverPixelIconSection => 'サーバーのピクセルアイコン';
+
+  @override
+  String get serverIconGrass => '草';
+
+  @override
+  String get serverIconCampfire => '焚き火';
+
+  @override
+  String get serverIconLantern => 'ランタン';
+
+  @override
+  String get serverIconChest => 'チェスト';
+
+  @override
+  String get serverIconBook => '本';
+
+  @override
+  String get serverIconSword => '剣';
+
+  @override
+  String get serverIconPickaxe => 'ツルハシ';
+
+  @override
+  String get serverIconCrown => '王冠';
+
+  @override
+  String get serverIconPortal => 'ポータル';
+
+  @override
+  String get serverIconCreeper => 'クリーパー';
 }

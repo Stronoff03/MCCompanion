@@ -8,6 +8,7 @@ import '../util/user_servers_storage.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/components/app_toast.dart';
 import '../widgets/components/swipe_back.dart';
+import '../widgets/pixel_art/pixel_art.dart';
 import '../layout/bar_inset.dart';
 
 class ManageServersScreen extends StatefulWidget {
@@ -172,6 +173,7 @@ class _AddEditServerScreenState extends State<AddEditServerScreen> {
   final TextEditingController _descCtrl = TextEditingController();
   bool _isJava = false;
   bool _loaded = false;
+  String _selectedIconId = 'grass';
 
   @override
   void initState() {
@@ -193,6 +195,9 @@ class _AddEditServerScreenState extends State<AddEditServerScreen> {
       _portCtrl.text = s.port.toString();
       _descCtrl.text = s.description ?? '';
       _isJava = s.isJava;
+      _selectedIconId =
+          PixelArtSettings.instance.getServerIconId(s.address, s.port) ??
+          'grass';
     }
     setState(() => _loaded = true);
   }
@@ -244,6 +249,11 @@ class _AddEditServerScreenState extends State<AddEditServerScreen> {
     } else {
       await UserServersStorage.updateServer(widget.editingIndex!, server);
     }
+    await PixelArtSettings.instance.setServerIconId(
+      server.address,
+      server.port,
+      _selectedIconId,
+    );
 
     widget.onSaved();
   }
@@ -331,6 +341,12 @@ class _AddEditServerScreenState extends State<AddEditServerScreen> {
                             },
                           ),
                           const SizedBox(height: DsSpace.md),
+                          _ServerIconPicker(
+                            selectedId: _selectedIconId,
+                            onSelected: (id) =>
+                                setState(() => _selectedIconId = id),
+                          ),
+                          const SizedBox(height: DsSpace.md),
                           _Field(
                             controller: _descCtrl,
                             label: loc.descriptionLabel,
@@ -364,16 +380,25 @@ class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: DsEmptyState(
-        icon: Icons.dns_rounded,
-        title: loc.noSavedServers,
-        message: loc.addServersHint,
-        action: DsButton(
-          label: loc.addServer,
-          icon: Icons.add_rounded,
-          tone: DsButtonTone.neutral,
-          size: DsButtonSize.small,
-          onPressed: onAdd,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(DsSpace.gutter),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 440),
+          child: DsCard(
+            padding: const EdgeInsets.all(DsSpace.lg),
+            child: DsEmptyState(
+              icon: Icons.dns_rounded,
+              title: loc.noSavedServers,
+              message: loc.addServersHint,
+              action: DsButton(
+                label: loc.addServer,
+                icon: Icons.add_rounded,
+                tone: DsButtonTone.neutral,
+                size: DsButtonSize.small,
+                onPressed: onAdd,
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -395,12 +420,7 @@ class _ServerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: DsColor.surface,
-        borderRadius: DsRadius.cardR,
-        border: Border.all(color: DsColor.line),
-      ),
+    return DsCard(
       padding: const EdgeInsets.fromLTRB(
         DsSpace.sm,
         DsSpace.md,
@@ -426,10 +446,42 @@ class _ServerCard extends StatelessWidget {
             height: 40,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: DsColor.accent.withValues(alpha: 0.14),
+              color: DsColor.inset,
               borderRadius: BorderRadius.circular(DsRadius.control - 2),
+              border: Border.all(color: DsColor.line),
             ),
-            child: Icon(Icons.dns_rounded, color: DsColor.accent, size: 18),
+            child: ValueListenableBuilder<bool>(
+              valueListenable: PixelArtSettings.instance.effectsEnabled,
+              builder: (_, effectsOn, _) {
+                if (!effectsOn) {
+                  return Icon(
+                    Icons.dns_rounded,
+                    color: DsColor.accent,
+                    size: 18,
+                  );
+                }
+                return ValueListenableBuilder<int>(
+                  valueListenable:
+                      PixelArtSettings.instance.serverIconsRevision,
+                  builder: (_, _, _) {
+                    final iconId = PixelArtSettings.instance.getServerIconId(
+                      server.address,
+                      server.port,
+                    );
+                    final spec = PixelArtAssets.serverIconFor(
+                      iconId,
+                      fallbackIndex: index,
+                    );
+                    return PixelSpriteAnimation(
+                      spec: spec,
+                      scale: spec == PixelArtAssets.lantern ? 1.1 : 0.9,
+                      playing: false,
+                      fixedFrame: 0,
+                    );
+                  },
+                );
+              },
+            ),
           ),
           const SizedBox(width: DsSpace.md),
           Expanded(
@@ -617,6 +669,112 @@ class _EditionToggle extends StatelessWidget {
             DsOption(value: true, label: loc.labelJava),
           ],
         ),
+      ],
+    );
+  }
+}
+
+class _ServerIconPicker extends StatelessWidget {
+  const _ServerIconPicker({
+    required this.selectedId,
+    required this.onSelected,
+  });
+
+  final String selectedId;
+  final ValueChanged<String> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    const choices = PixelArtAssets.serverIconChoices;
+    const perRow = 5;
+    final rows = <List<(String, PixelSpriteSheetSpec)>>[
+      for (var i = 0; i < choices.length; i += perRow)
+        choices.sublist(
+          i,
+          i + perRow > choices.length ? choices.length : i + perRow,
+        ),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          l.serverPixelIconSection,
+          style: DsType.pixelTag.copyWith(fontSize: 10),
+        ),
+        const SizedBox(height: DsSpace.sm),
+        for (var r = 0; r < rows.length; r++) ...[
+          if (r > 0) const SizedBox(height: DsSpace.sm),
+          Row(
+            children: [
+              for (final item in rows[r]) ...[
+                if (item != rows[r].first) const SizedBox(width: DsSpace.sm),
+                Expanded(
+                  child: GestureDetector(
+                    onTapUp: (details) {
+                      if (PixelArtSettings.instance.effectsEnabled.value) {
+                        PixelParticleOverlay.burst(
+                          context,
+                          details.globalPosition,
+                          preset: PixelParticlePreset.xpBurst,
+                          count: 4,
+                        );
+                      }
+                      onSelected(item.$1);
+                    },
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: PixelFrame(
+                        notch: 2.5,
+                        recessed: selectedId != item.$1,
+                        fillColor: selectedId == item.$1
+                            ? DsColor.accent.withValues(alpha: 0.16)
+                            : DsColor.inset,
+                        borderColor: selectedId == item.$1
+                            ? DsColor.accent.withValues(alpha: 0.70)
+                            : DsColor.line,
+                        bottomLipColor: selectedId == item.$1
+                            ? Colors.black.withValues(alpha: 0.35)
+                            : null,
+                        bottomLipHeight: selectedId == item.$1 ? 2.0 : 0,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: DsSpace.sm,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            PixelSpriteAnimation(
+                              spec: item.$2,
+                              scale: item.$2 == PixelArtAssets.lantern
+                                  ? 1.05
+                                  : 0.85,
+                              playing: false,
+                              fixedFrame: 0,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              PixelArtAssets.serverIconLabel(item.$1, l),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: DsType.caption.copyWith(
+                                fontSize: 10.5,
+                                color: selectedId == item.$1
+                                    ? DsColor.text
+                                    : DsColor.textFaint,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ],
       ],
     );
   }

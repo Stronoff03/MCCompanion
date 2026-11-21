@@ -6,6 +6,7 @@ import '../services/connectivity_checker.dart';
 import '../widgets/dialogs/connectivity_warning_dialog.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/components/animated_wordmark.dart';
+import '../widgets/pixel_art/pixel_art.dart';
 import 'app_shell.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -111,44 +112,71 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: DsColor.bg,
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: SafeArea(
-          child: Column(
-            children: [
-              const Spacer(),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: DsSpace.xxl),
-                child: AnimatedWordmark(asset: 'assets/images/logo.png'),
-              ),
-              const SizedBox(height: DsSpace.xxl),
-              SizedBox(
-                width: 96,
-                child: LinearProgressIndicator(
-                  minHeight: 2,
-                  backgroundColor: DsColor.line,
-                  color: DsColor.accent,
+      body: NightHorizonBackdrop(
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: SafeArea(
+            child: Column(
+              children: [
+                const Spacer(),
+                ValueListenableBuilder<bool>(
+                  valueListenable: PixelArtSettings.instance.effectsEnabled,
+                  builder: (_, effectsOn, _) {
+                    if (!effectsOn) return const SizedBox.shrink();
+                    return const Padding(
+                      padding: EdgeInsets.only(bottom: DsSpace.lg),
+                      child: PixelSpriteAnimation(
+                        spec: PixelArtAssets.floatingIsland,
+                        scale: 2.0,
+                      ),
+                    );
+                  },
                 ),
-              ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  DsSpace.lg,
-                  0,
-                  DsSpace.lg,
-                  DsSpace.xl,
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: DsSpace.xxl),
+                  child: AnimatedWordmark(asset: 'assets/images/logo.png'),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: _featureItems([
-                    AppLocalizations.of(context)!.featureLabelConnector,
-                    AppLocalizations.of(context)!.featureLabelPartners,
-                    AppLocalizations.of(context)!.featureLabelSkins,
-                    AppLocalizations.of(context)!.featureLabelLookup,
-                  ]),
+                const SizedBox(height: DsSpace.xl),
+                ValueListenableBuilder<bool>(
+                  valueListenable: PixelArtSettings.instance.effectsEnabled,
+                  builder: (_, effectsOn, _) {
+                    if (!effectsOn) {
+                      return SizedBox(
+                        width: 96,
+                        child: LinearProgressIndicator(
+                          minHeight: 2,
+                          backgroundColor: DsColor.line,
+                          color: DsColor.accent,
+                        ),
+                      );
+                    }
+                    return const PixelSpriteAnimation(
+                      spec: PixelArtAssets.splashLoader,
+                      scale: 2.6,
+                      playing: true,
+                    );
+                  },
                 ),
-              ),
-            ],
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    DsSpace.lg,
+                    0,
+                    DsSpace.lg,
+                    DsSpace.xl,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: _featureItems([
+                      AppLocalizations.of(context)!.featureLabelConnector,
+                      AppLocalizations.of(context)!.featureLabelPartners,
+                      AppLocalizations.of(context)!.featureLabelSkins,
+                      AppLocalizations.of(context)!.featureLabelLookup,
+                    ]),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

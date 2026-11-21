@@ -2037,5 +2037,170 @@
   "showLess": "Less",
   "lookupRecent": "Recent",
   "skinsRemovalNotice": "Skins will be removed in the next update. Export the skins you want to keep.",
-  "feedbackRpNotice": "We can't answer reports about resource packs. Some packs simply don't work, and some servers reject custom packs."
+  "feedbackRpNotice": "We can't answer reports about resource packs. Some packs simply don't work, and some servers reject custom packs.",
+  "pixelStatusReady": "READY",
+  "@pixelStatusReady": {
+    "description": "Top bar status badge when idle/ready"
+  },
+  "pixelStatusPortalActive": "PORTAL ACTIVE",
+  "@pixelStatusPortalActive": {
+    "description": "Top bar status badge when LAN broadcast portal is active"
+  },
+  "relayRegionEuropeTag": "EUROPE • EU",
+  "@relayRegionEuropeTag": {
+    "description": "Region badge for Europe relay server"
+  },
+  "relayRegionAmericaTag": "AMERICA • US",
+  "@relayRegionAmericaTag": {
+    "description": "Region badge for America relay server"
+  },
+  "relayRegionDefaultTag": "RELAY SERVER",
+  "@relayRegionDefaultTag": {
+    "description": "Fallback region badge for relay server"
+  },
+  "pixelAtmosphereSection": "PIXEL ATMOSPHERE",
+  "@pixelAtmosphereSection": {
+    "description": "Section title for pixel art atmosphere settings"
+  },
+  "pixelAnimationsTitle": "Pixel Animations",
+  "@pixelAnimationsTitle": {
+    "description": "Toggle title for pixel art animations"
+  },
+  "pixelAnimationsSubtitle": "Living horizon scenery, custom pixel icons, runes, and portal effects",
+  "@pixelAnimationsSubtitle": {
+    "description": "Toggle subtitle for pixel art animations"
+  },
+  "pixelAmbientBeesTitle": "Ambient Bees",
+  "@pixelAmbientBeesTitle": {
+    "description": "Toggle title for ambient Minecraft bees"
+  },
+  "pixelAmbientBeesSubtitle": "Interactive Minecraft bee calmly wandering in open spaces",
+  "@pixelAmbientBeesSubtitle": {
+    "description": "Toggle subtitle for ambient Minecraft bees"
+  },
+  "pixelAutoTimeTitle": "Automatic background by time of day",
+  "@pixelAutoTimeTitle": {
+    "description": "Toggle title for automatic time-of-day background"
+  },
+  "pixelAutoTimeActiveSubtitle": "Changes automatically by clock · Now: {biome}",
+  "@pixelAutoTimeActiveSubtitle": {
+    "description": "Subtitle when automatic time-of-day background is enabled",
+    "placeholders": {
+      "biome": {
+        "type": "String"
+      }
+    }
+  },
+  "pixelAutoTimeInactiveSubtitle": "Automatically shifts across Dawn, Daylight, Sunset, and Night by local time",
+  "@pixelAutoTimeInactiveSubtitle": {
+    "description": "Subtitle when automatic time-of-day background is disabled"
+  },
+  "pixelBiomeSection": "BACKGROUND BIOME",
+  "@pixelBiomeSection": {
+    "description": "Section title for background biome selection"
+  },
+  "pixelBiomeAutoHint": "· Auto (select one to lock)",
+  "@pixelBiomeAutoHint": {
+    "description": "Hint next to background biome section when auto mode is enabled"
+  },
+  "pixelBiomeAutoLabel": "Time of Day",
+  "@pixelBiomeAutoLabel": {
+    "description": "Label for automatic time-of-day biome"
+  },
+  "pixelBiomeAutoSubtitle": "Dawn, noon, sunset, night",
+  "@pixelBiomeAutoSubtitle": {
+    "description": "Subtitle for automatic time-of-day biome"
+  },
+  "pixelBiomeMorningLabel": "Morning Dawn",
+  "@pixelBiomeMorningLabel": {
+    "description": "Label for Morning Dawn biome"
+  },
+  "pixelBiomeMorningSubtitle": "Sunrise & Misty Village",
+  "@pixelBiomeMorningSubtitle": {
+    "description": "Subtitle for Morning Dawn biome"
+  },
+  "pixelBiomeDaylightLabel": "Daylight Valley",
+  "@pixelBiomeDaylightLabel": {
+    "description": "Label for Daylight Valley biome"
+  },
+  "pixelBiomeDaylightSubtitle": "Clouds & Windmill",
+  "@pixelBiomeDaylightSubtitle": {
+    "description": "Subtitle for Daylight Valley biome"
+  },
+  "pixelBiomeSunsetLabel": "Sunset Village",
+  "@pixelBiomeSunsetLabel": {
+    "description": "Label for Sunset Village biome"
+  },
+  "pixelBiomeSunsetSubtitle": "Dusk & Bell Tower",
+  "@pixelBiomeSunsetSubtitle": {
+    "description": "Subtitle for Sunset Village biome"
+  },
+  "pixelBiomeNightLabel": "Night Forest",
+  "@pixelBiomeNightLabel": {
+    "description": "Label for Night Forest biome"
+  },
+  "pixelBiomeNightSubtitle": "Beacon Pyramid & Lake",
+  "@pixelBiomeNightSubtitle": {
+    "description": "Subtitle for Night Forest biome"
+  },
+  "pixelBiomeNetherLabel": "Nether Crimson",
+  "@pixelBiomeNetherLabel": {
+    "description": "Label for Nether Crimson biome"
+  },
+  "pixelBiomeNetherSubtitle": "Ancient Portal & Fortress",
+  "@pixelBiomeNetherSubtitle": {
+    "description": "Subtitle for Nether Crimson biome"
+  },
+  "pixelBiomeEndLabel": "End Void",
+  "@pixelBiomeEndLabel": {
+    "description": "Label for End Void biome"
+  },
+  "pixelBiomeEndSubtitle": "End Crystals & Dragon Egg",
+  "@pixelBiomeEndSubtitle": {
+    "description": "Subtitle for End Void biome"
+  },
+  "serverPixelIconSection": "SERVER PIXEL ICON",
+  "@serverPixelIconSection": {
+    "description": "Section label for selecting a custom server pixel icon"
+  },
+  "serverIconGrass": "Grass",
+  "@serverIconGrass": {
+    "description": "Short label for Grass server icon"
+  },
+  "serverIconCampfire": "Camp",
+  "@serverIconCampfire": {
+    "description": "Short label for Campfire server icon"
+  },
+  "serverIconLantern": "Lantern",
+  "@serverIconLantern": {
+    "description": "Short label for Lantern server icon"
+  },
+  "serverIconChest": "Chest",
+  "@serverIconChest": {
+    "description": "Short label for Chest server icon"
+  },
+  "serverIconBook": "Book",
+  "@serverIconBook": {
+    "description": "Short label for Enchanted Book server icon"
+  },
+  "serverIconSword": "Sword",
+  "@serverIconSword": {
+    "description": "Short label for Diamond Sword server icon"
+  },
+  "serverIconPickaxe": "Pickaxe",
+  "@serverIconPickaxe": {
+    "description": "Short label for Diamond Pickaxe server icon"
+  },
+  "serverIconCrown": "Crown",
+  "@serverIconCrown": {
+    "description": "Short label for Golden Crown server icon"
+  },
+  "serverIconPortal": "Portal",
+  "@serverIconPortal": {
+    "description": "Short label for Nether Portal server icon"
+  },
+  "serverIconCreeper": "Creeper",
+  "@serverIconCreeper": {
+    "description": "Short label for Creeper server icon"
+  }
 }

@@ -42,6 +42,7 @@ class DesktopHowToScreen extends StatelessWidget {
             subtitle: item.subtitle(l),
             icon: item.icon,
             rowIcon: item.rowIcon,
+            pixelIconFrame: item.pixelIconFrame,
             color: item.color,
             content: (_) {
               final body = item.body(l, relayName: relayName, relayIp: relayIp);

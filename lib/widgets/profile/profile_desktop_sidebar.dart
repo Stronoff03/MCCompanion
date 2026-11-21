@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../design/design.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/app_theme.dart';
 import '../../models/user_model.dart';
@@ -82,32 +83,22 @@ class ProfileDesktopSidebar extends StatelessWidget {
           const SizedBox(height: 20),
           Divider(color: AppTheme.borderGray),
           const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: () => _openSearch(context),
-              icon: const Icon(Icons.search_rounded, size: 16),
-              label: Text(l.findUser),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppTheme.textSecondary,
-                side: BorderSide(color: AppTheme.borderGray),
-                padding: const EdgeInsets.symmetric(vertical: 10),
-              ),
-            ),
+          DsButton(
+            label: l.findUser,
+            icon: Icons.search_rounded,
+            tone: DsButtonTone.neutral,
+            size: DsButtonSize.small,
+            expand: true,
+            onPressed: () => _openSearch(context),
           ),
           const SizedBox(height: 8),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: onAddFriend,
-              icon: const Icon(Icons.person_add_rounded, size: 16),
-              label: Text(l.addFriend),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppTheme.accent,
-                side: BorderSide(color: AppTheme.accent.withValues(alpha: 0.5)),
-                padding: const EdgeInsets.symmetric(vertical: 10),
-              ),
-            ),
+          DsButton(
+            label: l.addFriend,
+            icon: Icons.person_add_rounded,
+            tone: DsButtonTone.accent,
+            size: DsButtonSize.small,
+            expand: true,
+            onPressed: onAddFriend,
           ),
           if (nav != null) ...[
             const SizedBox(height: 12),

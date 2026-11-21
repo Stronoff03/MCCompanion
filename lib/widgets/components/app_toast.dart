@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../../design/design.dart';
 import '../../theme/app_theme.dart';
-import '../../theme/app_tokens.dart';
+import '../pixel_art/pixel_art.dart';
 
 class AppToast {
   static OverlayEntry? _current;
@@ -88,6 +89,7 @@ class _AppToastWidgetState extends State<_AppToastWidget>
 
   @override
   Widget build(BuildContext context) {
+    final effectsOn = PixelArtSettings.instance.effectsEnabled.value;
     return Positioned(
       bottom: 24,
       left: 16,
@@ -99,57 +101,71 @@ class _AppToastWidgetState extends State<_AppToastWidget>
           child: Material(
             color: Colors.transparent,
             child: Center(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 480),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                decoration: BoxDecoration(
-                  color: AppTheme.surfaceRaised,
-                  borderRadius: AppRadius.medium,
-                  border: Border.all(
-                    color: widget.color.withValues(alpha: 0.35),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 460),
+                child: PixelFrame(
+                  notch: 4.0,
+                  showRivets: true,
+                  enableTexture: true,
+                  fillColor: DsColor.surface,
+                  borderColor: widget.color.withValues(alpha: 0.62),
+                  topHighlightColor: widget.color.withValues(alpha: 0.28),
+                  bottomLipColor: Colors.black.withValues(alpha: 0.50),
+                  bottomLipHeight: 3.0,
+                  rivetColor: widget.color.withValues(alpha: 0.55),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 11,
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.35),
-                      blurRadius: 20,
-                      offset: const Offset(0, 6),
-                    ),
-                    BoxShadow(
-                      color: widget.color.withValues(alpha: 0.10),
-                      blurRadius: 16,
-                      spreadRadius: -2,
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (widget.icon != null) ...[
-                      Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          color: widget.color.withValues(alpha: 0.12),
-                          borderRadius: AppRadius.small,
-                        ),
-                        child: Icon(widget.icon, size: 15, color: widget.color),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      PixelFrame(
+                        notch: 2.0,
+                        recessed: true,
+                        fillColor: DsColor.inset,
+                        borderColor: widget.color.withValues(alpha: 0.42),
+                        padding: const EdgeInsets.all(6),
+                        child: effectsOn
+                            ? const PixelSpriteAnimation(
+                                spec: PixelArtAssets.grassBlock,
+                                width: 22,
+                                height: 22,
+                                playing: false,
+                                fixedFrame: 0,
+                              )
+                            : Icon(
+                                widget.icon ?? Icons.check_rounded,
+                                size: 16,
+                                color: widget.color,
+                              ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 12),
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'MCCOMPANION',
+                              style: DsType.pixelTag.copyWith(
+                                fontSize: 9.5,
+                                color: widget.color,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              widget.message,
+                              style: DsType.heading.copyWith(
+                                fontSize: 13.5,
+                                color: AppTheme.textPrimary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
-                    Flexible(
-                      child: Text(
-                        widget.message,
-                        style: TextStyle(
-                          color: AppTheme.textPrimary,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),

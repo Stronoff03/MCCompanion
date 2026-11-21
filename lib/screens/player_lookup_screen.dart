@@ -180,20 +180,29 @@ class _PlayerLookupScreenState extends State<PlayerLookupScreen>
           child: idle
               ? Center(
                   child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(DsSpace.gutter),
                     child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 520),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          DsEmptyState(
-                            icon: Icons.person_search_rounded,
-                            title: loc.featureLabelLookup,
-                            message: loc.playerLookupSubtitle,
-                          ),
-                          const SizedBox(height: DsSpace.lg),
-                          _searchRow(loc),
-                          _recentChips(loc),
-                        ],
+                      constraints: const BoxConstraints(maxWidth: 560),
+                      child: DsCard(
+                        padding: const EdgeInsets.fromLTRB(
+                          DsSpace.xl,
+                          DsSpace.md,
+                          DsSpace.xl,
+                          DsSpace.xl,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            DsEmptyState(
+                              icon: Icons.person_search_rounded,
+                              title: loc.featureLabelLookup,
+                              message: loc.playerLookupSubtitle,
+                            ),
+                            const SizedBox(height: DsSpace.sm),
+                            _searchRow(loc),
+                            _recentChips(loc),
+                          ],
+                        ),
                       ),
                     ),
                   ),

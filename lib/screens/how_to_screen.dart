@@ -7,6 +7,7 @@ import '../theme/app_theme.dart';
 import '../util/howto_prefs.dart';
 import '../widgets/components/swipe_back.dart';
 import '../widgets/dialogs/howto_dialogs.dart';
+import '../widgets/pixel_art/pixel_art.dart';
 import '../layout/bar_inset.dart';
 
 enum HowToKind { xbox, friends }
@@ -25,6 +26,11 @@ extension HowToKindInfo on HowToKind {
   FaIconData get icon => switch (this) {
     HowToKind.xbox => FontAwesomeIcons.xbox,
     HowToKind.friends => FontAwesomeIcons.userGroup,
+  };
+
+  int get pixelIconFrame => switch (this) {
+    HowToKind.xbox => 3,
+    HowToKind.friends => 2,
   };
 
   String title(AppLocalizations l) => switch (this) {
@@ -120,12 +126,25 @@ class _HowToScreenState extends State<HowToScreen> {
                 label: l.modeLabel,
                 children: [
                   for (final kind in HowToKind.values)
-                    DsRow(
-                      title: kind.title(l),
-                      subtitle: kind.subtitle(l),
-                      icon: kind.rowIcon,
-                      iconColor: kind.color,
-                      onTap: () => setState(() => _open = kind),
+                    ValueListenableBuilder<bool>(
+                      valueListenable:
+                          PixelArtSettings.instance.effectsEnabled,
+                      builder: (_, effectsOn, _) => DsRow(
+                        title: kind.title(l),
+                        subtitle: kind.subtitle(l),
+                        icon: kind.rowIcon,
+                        customIcon: effectsOn
+                            ? PixelSpriteAnimation(
+                                spec: PixelArtAssets.guideIcons,
+                                fixedFrame: kind.pixelIconFrame,
+                                playing: false,
+                                width: 22,
+                                height: 22,
+                              )
+                            : null,
+                        iconColor: kind.color,
+                        onTap: () => setState(() => _open = kind),
+                      ),
                     ),
                 ],
               ),
@@ -156,15 +175,41 @@ class _HowToScreenState extends State<HowToScreen> {
             onPressed: () => setState(() => _open = null),
           ),
           actions: [
-            Container(
-              width: 36,
-              height: 36,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.14),
-                borderRadius: DsRadius.controlR,
-              ),
-              child: FaIcon(kind.icon, size: 15, color: color),
+            ValueListenableBuilder<bool>(
+              valueListenable: PixelArtSettings.instance.effectsEnabled,
+              builder: (_, effectsOn, _) {
+                if (!effectsOn) {
+                  return Container(
+                    width: 36,
+                    height: 36,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: color.withValues(alpha: 0.14),
+                      borderRadius: DsRadius.controlR,
+                    ),
+                    child: FaIcon(kind.icon, size: 15, color: color),
+                  );
+                }
+                return PixelFrame(
+                  notch: 2.5,
+                  recessed: true,
+                  fillColor: color.withValues(alpha: 0.14),
+                  borderColor: color.withValues(alpha: 0.36),
+                  child: SizedBox(
+                    width: 36,
+                    height: 36,
+                    child: Center(
+                      child: PixelSpriteAnimation(
+                        spec: PixelArtAssets.guideIcons,
+                        fixedFrame: kind.pixelIconFrame,
+                        playing: false,
+                        width: 22,
+                        height: 22,
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),

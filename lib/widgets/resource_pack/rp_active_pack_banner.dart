@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../design/design.dart';
 import '../../l10n/app_localizations.dart';
+import '../pixel_art/pixel_art.dart';
 
 class RpActivePackBanner extends StatelessWidget {
   final String? name;
@@ -32,18 +33,36 @@ class RpActivePackBanner extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 34,
-            height: 34,
+            width: 38,
+            height: 38,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: DsColor.inset,
-              shape: BoxShape.circle,
-              border: Border.all(color: DsColor.line),
+              borderRadius: BorderRadius.circular(DsRadius.control - 2),
+              border: Border.all(
+                color: on ? DsColor.accent.withValues(alpha: 0.45) : DsColor.line,
+              ),
             ),
-            child: Icon(
-              Icons.extension_rounded,
-              size: 16,
-              color: on ? DsColor.accent : DsColor.textFaint,
+            child: ValueListenableBuilder<bool>(
+              valueListenable: PixelArtSettings.instance.effectsEnabled,
+              builder: (_, effectsOn, _) {
+                if (!effectsOn) {
+                  return Icon(
+                    Icons.extension_rounded,
+                    size: 16,
+                    color: on ? DsColor.accent : DsColor.textFaint,
+                  );
+                }
+                return Opacity(
+                  opacity: on ? 1.0 : 0.72,
+                  child: PixelSpriteAnimation(
+                    spec: PixelArtAssets.chest,
+                    scale: 0.9,
+                    playing: on,
+                    fixedFrame: on ? null : 0,
+                  ),
+                );
+              },
             ),
           ),
           const SizedBox(width: DsSpace.md),

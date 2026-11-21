@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/pixel_art/pixel_art.dart';
 import 'ds_tokens.dart';
+import 'pixel_chrome.dart';
 
 class DsOption<T> {
   final T value;
@@ -24,13 +26,12 @@ class DsSegmented<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return PixelFrame(
+      notch: 3.5,
+      recessed: true,
+      fillColor: DsColor.inset,
+      borderColor: DsColor.lineStrong,
       padding: const EdgeInsets.all(DsSpace.xs),
-      decoration: BoxDecoration(
-        color: DsColor.inset,
-        borderRadius: DsRadius.controlR,
-        border: Border.all(color: DsColor.line),
-      ),
       child: Row(
         children: [
           for (final option in options)
@@ -49,46 +50,74 @@ class DsSegmented<T> extends StatelessWidget {
         ? DsColor.textSoft
         : DsColor.textDisabled;
 
+    final innerRow = Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (option.icon != null) ...[
+          Icon(option.icon, size: 15, color: foreground),
+          const SizedBox(width: DsSpace.sm - 2),
+        ],
+        Flexible(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              option.label,
+              maxLines: 1,
+              style: TextStyle(
+                fontFamily: 'ChakraPetch',
+                color: foreground,
+                fontSize: 13.5,
+                fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
+                letterSpacing: 0.25,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
+        onTapDown: enabled && !selected
+            ? (details) {
+                if (PixelArtSettings.instance.effectsEnabled.value) {
+                  PixelParticleOverlay.burst(
+                    context,
+                    details.globalPosition,
+                    preset: PixelParticlePreset.xpBurst,
+                    count: 4,
+                  );
+                }
+              }
+            : null,
         onTap: enabled && !selected ? () => onChanged!(option.value) : null,
-        borderRadius: BorderRadius.circular(DsRadius.control - 3),
-        child: AnimatedContainer(
-          duration: DsDuration.normal,
-          curve: Curves.easeOut,
-          height: 42,
-          alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: DsSpace.sm),
-          decoration: BoxDecoration(
-            color: selected ? DsColor.accent : Colors.transparent,
-            borderRadius: BorderRadius.circular(DsRadius.control - 3),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (option.icon != null) ...[
-                Icon(option.icon, size: 16, color: foreground),
-                const SizedBox(width: DsSpace.sm - 2),
-              ],
-              Flexible(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    option.label,
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: foreground,
-                      fontSize: 13.5,
-                      fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                      letterSpacing: -0.1,
-                    ),
+        customBorder: const PixelNotchedBorder(notch: 2.5),
+        child: SizedBox(
+          height: 40,
+          child: selected
+              ? PixelFrame(
+                  notch: 2.5,
+                  fillColor: DsColor.accent,
+                  borderColor: Color.alphaBlend(
+                    Colors.white.withValues(alpha: 0.22),
+                    DsColor.accent,
                   ),
+                  topHighlightColor: Colors.white.withValues(alpha: 0.28),
+                  bottomLipColor: Color.alphaBlend(
+                    Colors.black.withValues(alpha: 0.35),
+                    DsColor.accent,
+                  ),
+                  bottomLipHeight: 2.5,
+                  padding: const EdgeInsets.symmetric(horizontal: DsSpace.sm),
+                  child: Center(child: innerRow),
+                )
+              : Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.symmetric(horizontal: DsSpace.sm),
+                  child: innerRow,
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );
@@ -105,12 +134,12 @@ class DsSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     final enabled = onChanged != null;
     final track = value
-        ? DsColor.accent.withValues(alpha: enabled ? 1 : 0.35)
+        ? DsColor.accent.withValues(alpha: enabled ? 0.88 : 0.32)
         : DsColor.inset;
     final thumb = value
         ? DsColor.onAccent
         : enabled
-        ? DsColor.textFaint
+        ? DsColor.textSoft
         : DsColor.textDisabled;
 
     return Semantics(
@@ -118,28 +147,58 @@ class DsSwitch extends StatelessWidget {
       child: MouseRegion(
         cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
         child: GestureDetector(
-          onTap: enabled ? () => onChanged!(!value) : null,
+          onTapUp: enabled
+              ? (details) {
+                  if (PixelArtSettings.instance.effectsEnabled.value) {
+                    PixelParticleOverlay.burst(
+                      context,
+                      details.globalPosition,
+                      preset: !value
+                          ? PixelParticlePreset.grassBlock
+                          : PixelParticlePreset.xpBurst,
+                      count: 4,
+                    );
+                  }
+                  onChanged!(!value);
+                }
+              : null,
           behavior: HitTestBehavior.opaque,
-          child: AnimatedContainer(
-            duration: DsDuration.normal,
-            curve: Curves.easeOut,
-            width: 46,
-            height: 28,
-            padding: const EdgeInsets.all(3),
-            alignment: value ? Alignment.centerRight : Alignment.centerLeft,
-            decoration: BoxDecoration(
-              color: track,
-              borderRadius: DsRadius.pillR,
-              border: Border.all(
-                color: value ? Colors.transparent : DsColor.line,
+          child: SizedBox(
+            width: 48,
+            height: 26,
+            child: PixelFrame(
+              notch: 2.0,
+              recessed: !value,
+              fillColor: track,
+              borderColor: value
+                  ? Color.alphaBlend(
+                      Colors.white.withValues(alpha: 0.22),
+                      DsColor.accent,
+                    )
+                  : DsColor.lineStrong,
+              padding: const EdgeInsets.all(3),
+              child: AnimatedAlign(
+                duration: DsDuration.fast,
+                curve: Curves.easeOut,
+                alignment: value ? Alignment.centerRight : Alignment.centerLeft,
+                child: Container(
+                  width: 18,
+                  height: 18,
+                  decoration: BoxDecoration(
+                    color: thumb,
+                    border: Border(
+                      top: BorderSide(
+                        color: Colors.white.withValues(alpha: 0.28),
+                        width: 1.5,
+                      ),
+                      bottom: BorderSide(
+                        color: Colors.black.withValues(alpha: 0.35),
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            ),
-            child: AnimatedContainer(
-              duration: DsDuration.normal,
-              curve: Curves.easeOut,
-              width: 22,
-              height: 22,
-              decoration: BoxDecoration(color: thumb, shape: BoxShape.circle),
             ),
           ),
         ),
@@ -258,32 +317,29 @@ class DsBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return PixelFrame(
+      notch: 2.0,
+      fillColor: color.withValues(alpha: 0.14),
+      borderColor: color.withValues(alpha: 0.38),
       padding: const EdgeInsets.symmetric(
-        horizontal: DsSpace.md - 2,
-        vertical: DsSpace.xs + 1,
-      ),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.14),
-        borderRadius: DsRadius.pillR,
+        horizontal: DsSpace.sm + 2,
+        vertical: DsSpace.xs,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (dot) ...[
-            Container(
-              width: 6,
-              height: 6,
-              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-            ),
+            Container(width: 5, height: 5, color: color),
             const SizedBox(width: DsSpace.sm - 2),
           ],
           Text(
-            label,
+            label.toUpperCase(),
             style: TextStyle(
+              fontFamily: 'JetBrainsMono',
               color: color,
-              fontSize: 12.5,
-              fontWeight: FontWeight.w600,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.6,
             ),
           ),
         ],

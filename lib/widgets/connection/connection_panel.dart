@@ -13,6 +13,7 @@ import '../../services/navigation_controller.dart';
 import '../../util/howto_prefs.dart';
 import '../../widgets/dialogs/howto_dialogs.dart';
 import '../../widgets/featured_server_banner.dart';
+import '../../widgets/pixel_art/pixel_art.dart';
 import '../../design/design.dart';
 import 'link_panel.dart';
 
@@ -333,7 +334,12 @@ class _ConnectionPanelState extends State<ConnectionPanel> {
     final hasTarget = address.isNotEmpty;
 
     return Padding(
-      padding: const EdgeInsets.all(DsSpace.xxl),
+      padding: const EdgeInsets.fromLTRB(
+        DsSpace.xxl,
+        DsSpace.xl,
+        DsSpace.xxl,
+        DsSpace.xl,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -343,36 +349,138 @@ class _ConnectionPanelState extends State<ConnectionPanel> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(loc.featureLabelConnector, style: DsType.display),
-                const SizedBox(height: DsSpace.xl),
+                Row(
+                  children: [
+                    Container(width: 8, height: 8, color: DsColor.accent),
+                    const SizedBox(width: DsSpace.sm + 2),
+                    Expanded(
+                      child: Text(
+                        loc.featureLabelConnector,
+                        style: DsType.display,
+                      ),
+                    ),
+                    DsBadge(
+                      label: broadcasting ? loc.statusOnline : 'BEDROCK',
+                      color: broadcasting ? DsColor.success : DsColor.accent,
+                      dot: true,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: DsSpace.lg),
                 DsCard(
+                  showRivets: true,
+                  highlighted: broadcasting,
                   padding: const EdgeInsets.all(DsSpace.xl),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(loc.serversSection, style: DsType.caption),
-                      const SizedBox(height: DsSpace.xs),
-                      Text(
-                        selected?.name ??
-                            (hasTarget ? address : loc.chooseServerTitle),
-                        style: DsType.display.copyWith(fontSize: 26),
-                      ),
-                      if (hasTarget) ...[
-                        const SizedBox(height: DsSpace.xxs),
-                        Text(
-                          '$address:${widget.portController.text}',
-                          style: DsType.label,
+                      PixelFrame(
+                        notch: 3.5,
+                        recessed: true,
+                        fillColor: DsColor.inset,
+                        borderColor: broadcasting
+                            ? DsColor.accent.withValues(alpha: 0.50)
+                            : DsColor.lineStrong,
+                        padding: const EdgeInsets.all(DsSpace.md + 2),
+                        child: Row(
+                          children: [
+                            ValueListenableBuilder<bool>(
+                              valueListenable:
+                                  PixelArtSettings.instance.effectsEnabled,
+                              builder: (_, effectsOn, _) {
+                                if (!effectsOn) return const SizedBox.shrink();
+                                return Padding(
+                                  padding: const EdgeInsets.only(
+                                    right: DsSpace.md,
+                                  ),
+                                  child: PixelFrame(
+                                    notch: 2.5,
+                                    fillColor: DsColor.surfaceQuiet,
+                                    borderColor: broadcasting
+                                        ? DsColor.accent.withValues(alpha: 0.55)
+                                        : DsColor.lineStrong,
+                                    padding: const EdgeInsets.all(6),
+                                    child: ValueListenableBuilder<int>(
+                                      valueListenable: PixelArtSettings
+                                          .instance
+                                          .serverIconsRevision,
+                                      builder: (_, _, _) {
+                                        final port =
+                                            int.tryParse(
+                                              widget.portController.text,
+                                            ) ??
+                                            19132;
+                                        final iconId = hasTarget
+                                            ? PixelArtSettings.instance
+                                                  .getServerIconId(
+                                                    address,
+                                                    port,
+                                                  )
+                                            : null;
+                                        final spec =
+                                            PixelArtAssets.serverIconFor(
+                                              iconId,
+                                            );
+                                        return PixelSpriteAnimation(
+                                          spec: spec,
+                                          scale: spec == PixelArtAssets.lantern
+                                              ? 1.25
+                                              : 1.05,
+                                          playing: broadcasting,
+                                          fixedFrame: broadcasting ? null : 0,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    loc.serversSection.toUpperCase(),
+                                    style: DsType.pixelTag.copyWith(
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                  const SizedBox(height: DsSpace.xxs),
+                                  Text(
+                                    selected?.name ??
+                                        (hasTarget
+                                            ? address
+                                            : loc.chooseServerTitle),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: DsType.display.copyWith(fontSize: 23),
+                                  ),
+                                  if (hasTarget) ...[
+                                    const SizedBox(height: DsSpace.xxs),
+                                    Text(
+                                      '$address:${widget.portController.text}',
+                                      style: DsType.mono,
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                      const SizedBox(height: DsSpace.xl),
-                      Text(loc.modeLabel, style: DsType.caption),
+                      ),
+                      const SizedBox(height: DsSpace.lg),
+                      Text(
+                        loc.modeLabel.toUpperCase(),
+                        style: DsType.pixelTag.copyWith(fontSize: 10),
+                      ),
                       const SizedBox(height: DsSpace.sm),
                       Row(
                         children: [
                           for (final cfg in _modes) ...[
                             if (cfg != _modes.first)
-                              const SizedBox(width: DsSpace.sm),
+                              const SizedBox(width: DsSpace.sm + 2),
                             Expanded(child: _modeChip(cfg, broadcasting, loc)),
                           ],
                         ],
@@ -393,9 +501,9 @@ class _ConnectionPanelState extends State<ConnectionPanel> {
                           ),
                         ),
                       ],
-                      const SizedBox(height: DsSpace.xl),
+                      const SizedBox(height: DsSpace.lg),
                       _packRow(loc, broadcasting),
-                      const SizedBox(height: DsSpace.xl),
+                      const SizedBox(height: DsSpace.lg),
                       _buildStatus(broadcasting, loc),
                       _buildStartButton(broadcasting, loc),
                     ],
@@ -406,7 +514,7 @@ class _ConnectionPanelState extends State<ConnectionPanel> {
               ],
             ),
           ),
-          const SizedBox(width: DsSpace.xxl),
+          const SizedBox(width: DsSpace.xl),
           Expanded(flex: 2, child: _buildWideServerList(broadcasting, loc)),
         ],
       ),
@@ -428,36 +536,59 @@ class _ConnectionPanelState extends State<ConnectionPanel> {
     return Material(
       color: Colors.transparent,
       child: InkWell(
+        onTapDown: broadcasting
+            ? null
+            : (details) {
+                if (PixelArtSettings.instance.effectsEnabled.value) {
+                  PixelParticleOverlay.burst(
+                    context,
+                    details.globalPosition,
+                    preset: PixelParticlePreset.xpBurst,
+                    count: 4,
+                  );
+                }
+              },
         onTap: broadcasting ? null : () => _applyMode(cfg.mode),
-        borderRadius: DsRadius.controlR,
-        child: AnimatedContainer(
-          duration: DsDuration.fast,
+        customBorder: const PixelNotchedBorder(notch: 3.5),
+        child: PixelFrame(
+          notch: 3.5,
+          recessed: !active,
+          fillColor: active
+              ? DsColor.accent.withValues(alpha: 0.16)
+              : DsColor.inset,
+          borderColor: active
+              ? DsColor.accent.withValues(alpha: 0.72)
+              : DsColor.lineStrong,
+          topHighlightColor: active
+              ? DsColor.accent.withValues(alpha: 0.25)
+              : null,
+          bottomLipColor: active
+              ? Colors.black.withValues(alpha: 0.36)
+              : null,
+          bottomLipHeight: active ? 2.5 : 0,
           padding: const EdgeInsets.symmetric(
             horizontal: DsSpace.md,
             vertical: DsSpace.md,
           ),
-          decoration: BoxDecoration(
-            color: active
-                ? DsColor.accent.withValues(alpha: 0.12)
-                : DsColor.inset,
-            borderRadius: DsRadius.controlR,
-            border: Border.all(color: active ? DsColor.accent : DsColor.line),
-          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if (active) ...[
+                Container(width: 5, height: 5, color: DsColor.accent),
+                const SizedBox(width: DsSpace.sm),
+              ],
               Icon(
                 _modeIcon(cfg.mode),
-                size: 17,
+                size: 16,
                 color: active ? DsColor.accent : DsColor.textFaint,
               ),
               const SizedBox(width: DsSpace.sm),
               Flexible(
                 child: Text(
                   _modeLabel(cfg.mode, loc),
-                  style: DsType.body.copyWith(
+                  style: DsType.heading.copyWith(
+                    fontSize: 13.5,
                     color: active ? DsColor.text : DsColor.textSoft,
-                    fontWeight: active ? FontWeight.w600 : FontWeight.w500,
                   ),
                 ),
               ),
@@ -472,45 +603,76 @@ class _ConnectionPanelState extends State<ConnectionPanel> {
     final configured = widget.resourcePackConfigured;
     final on = configured && widget.resourcePackEnabled;
 
-    return Row(
-      children: [
-        Icon(
-          Icons.extension_rounded,
-          size: 18,
-          color: on ? DsColor.accent : DsColor.textFaint,
-        ),
-        const SizedBox(width: DsSpace.md),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(loc.rpScreenTitle, style: DsType.caption),
-              const SizedBox(height: DsSpace.xxs),
-              Text(
-                configured
-                    ? (widget.resourcePackName ?? loc.rpScreenTitle)
-                    : loc.none,
-                style: DsType.bodyStrong,
-              ),
-            ],
+    return PixelFrame(
+      notch: 3.5,
+      recessed: true,
+      fillColor: DsColor.inset,
+      borderColor: on ? DsColor.accent.withValues(alpha: 0.45) : DsColor.line,
+      padding: const EdgeInsets.symmetric(
+        horizontal: DsSpace.md,
+        vertical: DsSpace.sm + 2,
+      ),
+      child: Row(
+        children: [
+          ValueListenableBuilder<bool>(
+            valueListenable: PixelArtSettings.instance.effectsEnabled,
+            builder: (_, effectsOn, _) {
+              if (!effectsOn) {
+                return Icon(
+                  Icons.extension_rounded,
+                  size: 18,
+                  color: on ? DsColor.accent : DsColor.textFaint,
+                );
+              }
+              return Opacity(
+                opacity: on ? 1.0 : 0.72,
+                child: PixelSpriteAnimation(
+                  spec: PixelArtAssets.chest,
+                  scale: 0.85,
+                  playing: on,
+                  fixedFrame: on ? null : 0,
+                ),
+              );
+            },
           ),
-        ),
-        if (configured)
-          DsSwitch(
-            value: on,
-            onChanged: broadcasting || widget.onResourcePackToggle == null
-                ? null
-                : (value) => widget.onResourcePackToggle!(value),
+          const SizedBox(width: DsSpace.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  loc.rpScreenTitle.toUpperCase(),
+                  style: DsType.pixelTag.copyWith(fontSize: 10),
+                ),
+                const SizedBox(height: DsSpace.xxs),
+                Text(
+                  configured
+                      ? (widget.resourcePackName ?? loc.rpScreenTitle)
+                      : loc.none,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: DsType.bodyStrong,
+                ),
+              ],
+            ),
           ),
-        const SizedBox(width: DsSpace.sm),
-        DsButton(
-          label: loc.changeLabel,
-          tone: DsButtonTone.neutral,
-          size: DsButtonSize.small,
-          onPressed: broadcasting ? null : widget.onResourcePack,
-        ),
-      ],
+          if (configured)
+            DsSwitch(
+              value: on,
+              onChanged: broadcasting || widget.onResourcePackToggle == null
+                  ? null
+                  : (value) => widget.onResourcePackToggle!(value),
+            ),
+          const SizedBox(width: DsSpace.sm),
+          DsButton(
+            label: loc.changeLabel,
+            tone: DsButtonTone.neutral,
+            size: DsButtonSize.small,
+            onPressed: broadcasting ? null : widget.onResourcePack,
+          ),
+        ],
+      ),
     );
   }
 
@@ -525,55 +687,111 @@ class _ConnectionPanelState extends State<ConnectionPanel> {
       children: [
         Row(
           children: [
+            Container(
+              width: 7,
+              height: 7,
+              color: const Color(0xFFE08E45),
+            ),
+            const SizedBox(width: DsSpace.sm),
             Expanded(child: Text(loc.serversSection, style: DsType.heading)),
             DsButton(
               label: loc.manageServers,
               icon: Icons.tune_rounded,
-              tone: DsButtonTone.quiet,
+              tone: DsButtonTone.neutral,
               size: DsButtonSize.small,
               onPressed: broadcasting ? null : widget.onManageServers,
             ),
           ],
         ),
         const SizedBox(height: DsSpace.md),
-        if (servers.isEmpty)
+        if (servers.isEmpty) ...[
           DsCard(
+            showRivets: true,
             padding: EdgeInsets.zero,
-            child: DsEmptyState(
-              icon: Icons.dns_rounded,
-              title: loc.chooseServerTitle,
-              action: DsButton(
-                label: loc.addServer,
-                icon: Icons.add_rounded,
-                tone: DsButtonTone.neutral,
-                size: DsButtonSize.small,
-                onPressed: broadcasting ? null : widget.onManageServers,
+            child: CustomPaint(
+              painter: _CampfireClearingPainter(baseColor: DsColor.surface),
+              child: DsEmptyState(
+                icon: Icons.dns_rounded,
+                title: loc.chooseServerTitle,
+                action: DsButton(
+                  label: loc.addServer,
+                  icon: Icons.add_rounded,
+                  tone: DsButtonTone.accent,
+                  size: DsButtonSize.small,
+                  onPressed: broadcasting ? null : widget.onManageServers,
+                ),
               ),
             ),
-          )
-        else
-          for (final server in servers) ...[
-            if (server != servers.first) const SizedBox(height: DsSpace.sm),
-            DsTile(
-              title: server.name,
-              subtitle: '${server.address}:${server.port}',
-              icon: Icons.dns_rounded,
-              dense: true,
-              selected:
-                  server.address == selectedAddress &&
-                  server.port == selectedPort,
-              trailing:
-                  server.address == selectedAddress &&
-                      server.port == selectedPort
-                  ? Icon(
-                      Icons.check_circle_rounded,
-                      size: 20,
-                      color: DsColor.accent,
-                    )
-                  : null,
-              onTap: broadcasting
-                  ? null
-                  : () => widget.onServerSelected(server),
+          ),
+          const SizedBox(height: DsSpace.md),
+          DsCard(
+            padding: const EdgeInsets.symmetric(
+              horizontal: DsSpace.md,
+              vertical: DsSpace.md,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ValueListenableBuilder<bool>(
+                  valueListenable: PixelArtSettings.instance.effectsEnabled,
+                  builder: (_, effectsOn, _) {
+                    if (!effectsOn) {
+                      return Icon(
+                        Icons.tips_and_updates_outlined,
+                        size: 18,
+                        color: DsColor.textFaint,
+                      );
+                    }
+                    return const PixelSpriteAnimation(
+                      spec: PixelArtAssets.lantern,
+                      scale: 1.0,
+                      playing: false,
+                      fixedFrame: 0,
+                    );
+                  },
+                ),
+                const SizedBox(width: DsSpace.md),
+                Expanded(
+                  child: Text(
+                    loc.consoleLanHint,
+                    style: DsType.caption,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ] else
+          for (var i = 0; i < servers.length; i++) ...[
+            if (i > 0) const SizedBox(height: DsSpace.sm),
+            Builder(
+              builder: (_) {
+                final server = servers[i];
+                final isSelected =
+                    server.address == selectedAddress &&
+                    server.port == selectedPort;
+                return DsTile(
+                  title: server.name,
+                  subtitle: '${server.address}:${server.port}',
+                  leading: _SavedServerPixelIcon(
+                    address: server.address,
+                    port: server.port,
+                    fallbackIndex: i,
+                    selected: isSelected,
+                  ),
+                  dense: true,
+                  selected: isSelected,
+                  trailing: isSelected
+                      ? Icon(
+                          Icons.check_circle_rounded,
+                          size: 20,
+                          color: DsColor.accent,
+                        )
+                      : null,
+                  onTap: broadcasting
+                      ? null
+                      : () => widget.onServerSelected(server),
+                );
+              },
             ),
           ],
       ],
@@ -846,4 +1064,150 @@ class _HoverableState extends State<_Hoverable> {
       ),
     );
   }
+}
+
+class _SavedServerPixelIcon extends StatelessWidget {
+  const _SavedServerPixelIcon({
+    required this.address,
+    required this.port,
+    required this.fallbackIndex,
+    required this.selected,
+  });
+
+  final String address;
+  final int port;
+  final int fallbackIndex;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 36,
+      height: 36,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: selected
+            ? DsColor.accent.withValues(alpha: 0.18)
+            : DsColor.inset,
+        borderRadius: BorderRadius.circular(DsRadius.control - 2),
+        border: Border.all(
+          color: selected
+              ? DsColor.accent.withValues(alpha: 0.45)
+              : DsColor.line,
+        ),
+      ),
+      child: ValueListenableBuilder<bool>(
+        valueListenable: PixelArtSettings.instance.effectsEnabled,
+        builder: (_, effectsOn, _) {
+          if (!effectsOn) {
+            return Icon(Icons.dns_rounded, size: 17, color: DsColor.accent);
+          }
+          return ValueListenableBuilder<int>(
+            valueListenable: PixelArtSettings.instance.serverIconsRevision,
+            builder: (_, _, _) {
+              final iconId = PixelArtSettings.instance.getServerIconId(
+                address,
+                port,
+              );
+              final spec = PixelArtAssets.serverIconFor(
+                iconId,
+                fallbackIndex: fallbackIndex,
+              );
+              return PixelSpriteAnimation(
+                spec: spec,
+                scale: spec == PixelArtAssets.lantern ? 1.0 : 0.82,
+                playing: false,
+                fixedFrame: 0,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// Subtle, blocky Minecraft night campsite clearing painted behind the
+/// crackling Aseprite campfire in the empty Servers dock card.
+class _CampfireClearingPainter extends CustomPainter {
+  const _CampfireClearingPainter({required this.baseColor});
+
+  final Color baseColor;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (size.width < 120 || size.height < 120) return;
+    final cx = size.width * 0.5;
+    final fireY = 74.0;
+    final paint = Paint()..isAntiAlias = false;
+
+    // Soft warm campfire radial light
+    final glowRect = Rect.fromCenter(
+      center: Offset(cx, fireY),
+      width: size.width * 0.85,
+      height: 160,
+    );
+    final glowPaint = Paint()
+      ..shader = RadialGradient(
+        colors: <Color>[
+          const Color(0xFFE08E45).withValues(alpha: 0.14),
+          const Color(0xFFE08E45).withValues(alpha: 0.04),
+          Colors.transparent,
+        ],
+        stops: const <double>[0.0, 0.52, 1.0],
+      ).createShader(glowRect);
+    canvas.drawRect(glowRect, glowPaint);
+
+    // Subtle pixel stars in upper clearing sky
+    paint.color = const Color(0xFFB4CFD9).withValues(alpha: 0.24);
+    for (final pt in <Offset>[
+      Offset(size.width * 0.16, 26),
+      Offset(size.width * 0.28, 18),
+      Offset(size.width * 0.76, 22),
+      Offset(size.width * 0.85, 34),
+      Offset(size.width * 0.64, 15),
+    ]) {
+      canvas.drawRect(Rect.fromLTWH(pt.dx.roundToDouble(), pt.dy, 2, 2), paint);
+    }
+
+    // Distant blocky spruce pines flanking the clearing
+    void drawPine(double x, double baseY, double scale) {
+      paint.color = Color.alphaBlend(
+        const Color(0xFF1A4240).withValues(alpha: 0.65),
+        baseColor,
+      );
+      canvas.drawRect(
+        Rect.fromLTWH(x - 10 * scale, baseY - 12 * scale, 20 * scale, 10 * scale),
+        paint,
+      );
+      canvas.drawRect(
+        Rect.fromLTWH(x - 6 * scale, baseY - 21 * scale, 12 * scale, 9 * scale),
+        paint,
+      );
+      canvas.drawRect(
+        Rect.fromLTWH(x - 2 * scale, baseY - 27 * scale, 4 * scale, 6 * scale),
+        paint,
+      );
+    }
+
+    final groundY = 104.0;
+    drawPine(size.width * 0.16, groundY, 1.0);
+    drawPine(size.width * 0.25, groundY + 2, 0.78);
+    drawPine(size.width * 0.84, groundY, 0.95);
+    drawPine(size.width * 0.75, groundY + 2, 0.72);
+
+    // Blocky mossy clearing platform beneath the campfire
+    final platW = (size.width * 0.66).clamp(120.0, 230.0);
+    final px = (cx - platW / 2).roundToDouble();
+    paint.color = const Color(0xFF285936).withValues(alpha: 0.55);
+    canvas.drawRect(Rect.fromLTWH(px, groundY, platW, 6), paint);
+    paint.color = const Color(0xFF3E8248).withValues(alpha: 0.55);
+    canvas.drawRect(Rect.fromLTWH(px + 10, groundY - 2, platW - 20, 3), paint);
+    paint.color = const Color(0xFF473022).withValues(alpha: 0.45);
+    canvas.drawRect(Rect.fromLTWH(px + 8, groundY + 6, platW - 16, 8), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _CampfireClearingPainter old) =>
+      old.baseColor != baseColor;
 }

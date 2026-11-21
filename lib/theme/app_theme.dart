@@ -61,6 +61,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
+      fontFamily: 'PlusJakartaSans',
       colorScheme: ColorScheme(
         brightness: Brightness.dark,
         primary: a,
@@ -285,6 +286,27 @@ class AppTheme {
           if (states.contains(WidgetState.selected)) return a;
           return textMuted;
         }),
+      ),
+
+      scrollbarTheme: ScrollbarThemeData(
+        radius: Radius.zero,
+        thickness: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.hovered) ||
+              states.contains(WidgetState.dragged)) {
+            return 8;
+          }
+          return 6;
+        }),
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.dragged)) {
+            return a.withValues(alpha: 0.72);
+          }
+          if (states.contains(WidgetState.hovered)) {
+            return a.withValues(alpha: 0.48);
+          }
+          return tp.withValues(alpha: 0.18);
+        }),
+        trackColor: WidgetStateProperty.all(Colors.black.withValues(alpha: 0.14)),
       ),
     );
   }

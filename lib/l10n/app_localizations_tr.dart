@@ -2075,4 +2075,129 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get feedbackRpNotice =>
       'Kaynak paketleriyle ilgili bildirimlere yanıt vermiyoruz. Bazı paketler hiç çalışmıyor ve bazı sunucular özel paketleri reddediyor.';
+
+  @override
+  String get pixelStatusReady => 'HAZIR';
+
+  @override
+  String get pixelStatusPortalActive => 'PORTAL AKTİF';
+
+  @override
+  String get relayRegionEuropeTag => 'AVRUPA • EU';
+
+  @override
+  String get relayRegionAmericaTag => 'AMERİKA • US';
+
+  @override
+  String get relayRegionDefaultTag => 'RÖLE SUNUCU';
+
+  @override
+  String get pixelAtmosphereSection => 'PİKSEL ATMOSFERİ';
+
+  @override
+  String get pixelAnimationsTitle => 'Piksel Animasyonları';
+
+  @override
+  String get pixelAnimationsSubtitle =>
+      'Canlı ufuk manzarası, özel piksel ikonlar, rünler ve portal efektleri';
+
+  @override
+  String get pixelAmbientBeesTitle => 'Ortam Arıları';
+
+  @override
+  String get pixelAmbientBeesSubtitle =>
+      'Alt boşluklarda sakin gezen etkileşimli Minecraft arısı';
+
+  @override
+  String get pixelAutoTimeTitle => 'Günün saatine göre otomatik arka plan';
+
+  @override
+  String pixelAutoTimeActiveSubtitle(String biome) {
+    return 'Saate göre otomatik değişir · Şu an: $biome';
+  }
+
+  @override
+  String get pixelAutoTimeInactiveSubtitle =>
+      'Sabah, Gündüz, Gün Batımı ve Gece arasında saate göre otomatik geçer';
+
+  @override
+  String get pixelBiomeSection => 'ARKA PLAN BİYOMU';
+
+  @override
+  String get pixelBiomeAutoHint => '· Otomatik (seçersen sabitlenir)';
+
+  @override
+  String get pixelBiomeAutoLabel => 'Günün Vakti';
+
+  @override
+  String get pixelBiomeAutoSubtitle => 'Sabah, öğlen, akşam, gece';
+
+  @override
+  String get pixelBiomeMorningLabel => 'Sabah Şafağı';
+
+  @override
+  String get pixelBiomeMorningSubtitle => 'Gündoğumu & Sisli Köy';
+
+  @override
+  String get pixelBiomeDaylightLabel => 'Gündüz Vadisi';
+
+  @override
+  String get pixelBiomeDaylightSubtitle => 'Bulutlar & Yel Değirmeni';
+
+  @override
+  String get pixelBiomeSunsetLabel => 'Gün Batımı';
+
+  @override
+  String get pixelBiomeSunsetSubtitle => 'Akşam & Çan Kulesi';
+
+  @override
+  String get pixelBiomeNightLabel => 'Gece Ormanı';
+
+  @override
+  String get pixelBiomeNightSubtitle => 'Fener Piramidi & Göl';
+
+  @override
+  String get pixelBiomeNetherLabel => 'Nether Kızılı';
+
+  @override
+  String get pixelBiomeNetherSubtitle => 'Antik Portal & Kale';
+
+  @override
+  String get pixelBiomeEndLabel => 'End Boşluğu';
+
+  @override
+  String get pixelBiomeEndSubtitle => 'End Kristalleri & Yumurta';
+
+  @override
+  String get serverPixelIconSection => 'SUNUCU PİKSEL İKONU';
+
+  @override
+  String get serverIconGrass => 'Çim';
+
+  @override
+  String get serverIconCampfire => 'Kamp';
+
+  @override
+  String get serverIconLantern => 'Fener';
+
+  @override
+  String get serverIconChest => 'Sandık';
+
+  @override
+  String get serverIconBook => 'Kitap';
+
+  @override
+  String get serverIconSword => 'Kılıç';
+
+  @override
+  String get serverIconPickaxe => 'Kazma';
+
+  @override
+  String get serverIconCrown => 'Taç';
+
+  @override
+  String get serverIconPortal => 'Portal';
+
+  @override
+  String get serverIconCreeper => 'Creeper';
 }

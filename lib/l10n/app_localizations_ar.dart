@@ -2069,4 +2069,129 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get feedbackRpNotice =>
       'لا نرد على البلاغات المتعلقة بحزم الموارد. بعض الحزم لا تعمل ببساطة، وبعض الخوادم ترفض الحزم المخصصة.';
+
+  @override
+  String get pixelStatusReady => 'جاهز';
+
+  @override
+  String get pixelStatusPortalActive => 'البوابة نشطة';
+
+  @override
+  String get relayRegionEuropeTag => 'أوروبا • EU';
+
+  @override
+  String get relayRegionAmericaTag => 'أمريكا • US';
+
+  @override
+  String get relayRegionDefaultTag => 'خادم الترحيل';
+
+  @override
+  String get pixelAtmosphereSection => 'أجواء البكسل';
+
+  @override
+  String get pixelAnimationsTitle => 'رسوم البكسل المتحركة';
+
+  @override
+  String get pixelAnimationsSubtitle =>
+      'أفق حي وأيقونات بكسل مخصصة ورونز وتأثيرات البوابة';
+
+  @override
+  String get pixelAmbientBeesTitle => 'نحل الأجواء';
+
+  @override
+  String get pixelAmbientBeesSubtitle =>
+      'نحلة ماينكرافت تفاعلية تتجول بهدوء في المساحات الفارغة';
+
+  @override
+  String get pixelAutoTimeTitle => 'خلفية تلقائية حسب وقت اليوم';
+
+  @override
+  String pixelAutoTimeActiveSubtitle(String biome) {
+    return 'تتغير تلقائياً حسب الساعة · الآن: $biome';
+  }
+
+  @override
+  String get pixelAutoTimeInactiveSubtitle =>
+      'تنتقل تلقائياً بين الفجر والنهار والغروب والليل حسب الوقت المحلي';
+
+  @override
+  String get pixelBiomeSection => 'بيئة الخلفية';
+
+  @override
+  String get pixelBiomeAutoHint => '· تلقائي (اختر لتثبيت بيئة)';
+
+  @override
+  String get pixelBiomeAutoLabel => 'وقت اليوم';
+
+  @override
+  String get pixelBiomeAutoSubtitle => 'الفجر، النهار، الغروب، الليل';
+
+  @override
+  String get pixelBiomeMorningLabel => 'فجر الصباح';
+
+  @override
+  String get pixelBiomeMorningSubtitle => 'شروق الشمس وقرية ضبابية';
+
+  @override
+  String get pixelBiomeDaylightLabel => 'وادي النهار';
+
+  @override
+  String get pixelBiomeDaylightSubtitle => 'غيوم وطاحونة هواء';
+
+  @override
+  String get pixelBiomeSunsetLabel => 'قرية الغروب';
+
+  @override
+  String get pixelBiomeSunsetSubtitle => 'الغسق وبرج الجرس';
+
+  @override
+  String get pixelBiomeNightLabel => 'غابة الليل';
+
+  @override
+  String get pixelBiomeNightSubtitle => 'هرم المنارة والبحيرة';
+
+  @override
+  String get pixelBiomeNetherLabel => 'نذر قرمزي';
+
+  @override
+  String get pixelBiomeNetherSubtitle => 'بوابة قديمة وقلعة';
+
+  @override
+  String get pixelBiomeEndLabel => 'فراغ الإند';
+
+  @override
+  String get pixelBiomeEndSubtitle => 'بلورات الإند وبيضة التنين';
+
+  @override
+  String get serverPixelIconSection => 'أيقونة بكسل الخادم';
+
+  @override
+  String get serverIconGrass => 'عشب';
+
+  @override
+  String get serverIconCampfire => 'نار';
+
+  @override
+  String get serverIconLantern => 'فانوس';
+
+  @override
+  String get serverIconChest => 'صندوق';
+
+  @override
+  String get serverIconBook => 'كتاب';
+
+  @override
+  String get serverIconSword => 'سيف';
+
+  @override
+  String get serverIconPickaxe => 'معول';
+
+  @override
+  String get serverIconCrown => 'تاج';
+
+  @override
+  String get serverIconPortal => 'بوابة';
+
+  @override
+  String get serverIconCreeper => 'كريبر';
 }

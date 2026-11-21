@@ -2094,4 +2094,129 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get feedbackRpNotice =>
       'We beantwoorden geen meldingen over resource packs. Sommige packs werken gewoon niet, en sommige servers weigeren eigen packs.';
+
+  @override
+  String get pixelStatusReady => 'GEREED';
+
+  @override
+  String get pixelStatusPortalActive => 'PORTAAL ACTIEF';
+
+  @override
+  String get relayRegionEuropeTag => 'EUROPA • EU';
+
+  @override
+  String get relayRegionAmericaTag => 'AMERIKA • US';
+
+  @override
+  String get relayRegionDefaultTag => 'RELAYSERVER';
+
+  @override
+  String get pixelAtmosphereSection => 'PIXEL-ATMOSFEER';
+
+  @override
+  String get pixelAnimationsTitle => 'Pixelanimaties';
+
+  @override
+  String get pixelAnimationsSubtitle =>
+      'Levendige horizon, eigen pixeliconen, runen en portaaleffecten';
+
+  @override
+  String get pixelAmbientBeesTitle => 'Omgevingsbijen';
+
+  @override
+  String get pixelAmbientBeesSubtitle =>
+      'Interactieve Minecraft-bij die rustig door open ruimtes vliegt';
+
+  @override
+  String get pixelAutoTimeTitle => 'Automatische achtergrond op tijdstip';
+
+  @override
+  String pixelAutoTimeActiveSubtitle(String biome) {
+    return 'Wisselt automatisch met de klok · Nu: $biome';
+  }
+
+  @override
+  String get pixelAutoTimeInactiveSubtitle =>
+      'Wisselt automatisch tussen Ochtend, Dag, Zonsondergang en Nacht';
+
+  @override
+  String get pixelBiomeSection => 'ACHTERGRONDBIOOM';
+
+  @override
+  String get pixelBiomeAutoHint => '· Auto (kies om vast te zetten)';
+
+  @override
+  String get pixelBiomeAutoLabel => 'Tijdstip';
+
+  @override
+  String get pixelBiomeAutoSubtitle => 'Ochtend, middag, avond, nacht';
+
+  @override
+  String get pixelBiomeMorningLabel => 'Ochtendgloren';
+
+  @override
+  String get pixelBiomeMorningSubtitle => 'Zonsopgang & mistig dorp';
+
+  @override
+  String get pixelBiomeDaylightLabel => 'Dagvallei';
+
+  @override
+  String get pixelBiomeDaylightSubtitle => 'Wolken & windmolen';
+
+  @override
+  String get pixelBiomeSunsetLabel => 'Zonsondergang';
+
+  @override
+  String get pixelBiomeSunsetSubtitle => 'Schemering & klokkentoren';
+
+  @override
+  String get pixelBiomeNightLabel => 'Nachtbos';
+
+  @override
+  String get pixelBiomeNightSubtitle => 'Bakenpiramide & meer';
+
+  @override
+  String get pixelBiomeNetherLabel => 'Nether-karmozijn';
+
+  @override
+  String get pixelBiomeNetherSubtitle => 'Oud portaal & fort';
+
+  @override
+  String get pixelBiomeEndLabel => 'End-leegte';
+
+  @override
+  String get pixelBiomeEndSubtitle => 'Endkristallen & drakenei';
+
+  @override
+  String get serverPixelIconSection => 'SERVER-PIXELICOON';
+
+  @override
+  String get serverIconGrass => 'Gras';
+
+  @override
+  String get serverIconCampfire => 'Kampvuur';
+
+  @override
+  String get serverIconLantern => 'Lantaarn';
+
+  @override
+  String get serverIconChest => 'Kist';
+
+  @override
+  String get serverIconBook => 'Boek';
+
+  @override
+  String get serverIconSword => 'Zwaard';
+
+  @override
+  String get serverIconPickaxe => 'Houweel';
+
+  @override
+  String get serverIconCrown => 'Kroon';
+
+  @override
+  String get serverIconPortal => 'Portaal';
+
+  @override
+  String get serverIconCreeper => 'Creeper';
 }

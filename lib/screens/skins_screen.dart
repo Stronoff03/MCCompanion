@@ -223,11 +223,20 @@ class SkinsScreenState extends State<SkinsScreen> {
       );
     }
     if (_savedSkins.isEmpty) {
-      return DsCard(
-        child: Text(
-          l.skinsEmptyLocalSkins,
-          style: DsType.caption,
-          textAlign: TextAlign.center,
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.only(top: DsSpace.xxl),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 440),
+            child: DsCard(
+              padding: const EdgeInsets.all(DsSpace.lg),
+              child: DsEmptyState(
+                icon: Icons.checkroom_rounded,
+                title: l.featureLabelSkins,
+                message: l.skinsEmptyLocalSkins,
+              ),
+            ),
+          ),
         ),
       );
     }

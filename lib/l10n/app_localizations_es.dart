@@ -2087,4 +2087,129 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get feedbackRpNotice =>
       'No respondemos a reportes sobre packs de recursos. Algunos packs simplemente no funcionan y algunos servidores rechazan los packs personalizados.';
+
+  @override
+  String get pixelStatusReady => 'LISTO';
+
+  @override
+  String get pixelStatusPortalActive => 'PORTAL ACTIVO';
+
+  @override
+  String get relayRegionEuropeTag => 'EUROPA • EU';
+
+  @override
+  String get relayRegionAmericaTag => 'AMÉRICA • US';
+
+  @override
+  String get relayRegionDefaultTag => 'SERVIDOR RELAY';
+
+  @override
+  String get pixelAtmosphereSection => 'ATMÓSFERA PÍXEL';
+
+  @override
+  String get pixelAnimationsTitle => 'Animaciones píxel';
+
+  @override
+  String get pixelAnimationsSubtitle =>
+      'Horizonte vivo, íconos píxel propios, runas y efectos de portal';
+
+  @override
+  String get pixelAmbientBeesTitle => 'Abejas ambientales';
+
+  @override
+  String get pixelAmbientBeesSubtitle =>
+      'Abeja interactiva de Minecraft volando con calma por los espacios libres';
+
+  @override
+  String get pixelAutoTimeTitle => 'Fondo automático según la hora del día';
+
+  @override
+  String pixelAutoTimeActiveSubtitle(String biome) {
+    return 'Cambia automáticamente según el reloj · Ahora: $biome';
+  }
+
+  @override
+  String get pixelAutoTimeInactiveSubtitle =>
+      'Cambia entre Amanecer, Día, Atardecer y Noche según tu hora local';
+
+  @override
+  String get pixelBiomeSection => 'BIOMA DE FONDO';
+
+  @override
+  String get pixelBiomeAutoHint => '· Auto (elige uno para fijarlo)';
+
+  @override
+  String get pixelBiomeAutoLabel => 'Hora del día';
+
+  @override
+  String get pixelBiomeAutoSubtitle => 'Amanecer, día, tarde, noche';
+
+  @override
+  String get pixelBiomeMorningLabel => 'Alba matinal';
+
+  @override
+  String get pixelBiomeMorningSubtitle => 'Amanecer y aldea brumosa';
+
+  @override
+  String get pixelBiomeDaylightLabel => 'Valle diurno';
+
+  @override
+  String get pixelBiomeDaylightSubtitle => 'Nubes y molino de viento';
+
+  @override
+  String get pixelBiomeSunsetLabel => 'Aldea al atardecer';
+
+  @override
+  String get pixelBiomeSunsetSubtitle => 'Ocaso y campanario';
+
+  @override
+  String get pixelBiomeNightLabel => 'Bosque nocturno';
+
+  @override
+  String get pixelBiomeNightSubtitle => 'Faro piramidal y lago';
+
+  @override
+  String get pixelBiomeNetherLabel => 'Nether carmesí';
+
+  @override
+  String get pixelBiomeNetherSubtitle => 'Portal antiguo y fortaleza';
+
+  @override
+  String get pixelBiomeEndLabel => 'Vacío del End';
+
+  @override
+  String get pixelBiomeEndSubtitle => 'Cristales del End y huevo';
+
+  @override
+  String get serverPixelIconSection => 'ÍCONO PÍXEL DEL SERVIDOR';
+
+  @override
+  String get serverIconGrass => 'Césped';
+
+  @override
+  String get serverIconCampfire => 'Fogata';
+
+  @override
+  String get serverIconLantern => 'Farol';
+
+  @override
+  String get serverIconChest => 'Cofre';
+
+  @override
+  String get serverIconBook => 'Libro';
+
+  @override
+  String get serverIconSword => 'Espada';
+
+  @override
+  String get serverIconPickaxe => 'Pico';
+
+  @override
+  String get serverIconCrown => 'Corona';
+
+  @override
+  String get serverIconPortal => 'Portal';
+
+  @override
+  String get serverIconCreeper => 'Creeper';
 }

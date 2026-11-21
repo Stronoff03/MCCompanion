@@ -8,6 +8,7 @@ import '../../theme/app_theme.dart';
 import '../../design/design.dart';
 import '../../util/howto_prefs.dart';
 import '../components/app_toast.dart';
+import '../pixel_art/pixel_art.dart';
 import '../../theme/app_tokens.dart';
 
 class HowToDialogs {
@@ -478,13 +479,12 @@ class StepContent extends StatelessWidget {
       }
 
       widgets.add(
-        Container(
+        PixelFrame(
+          notch: 2.5,
+          recessed: true,
+          fillColor: DsColor.surface.withValues(alpha: 0.76),
+          borderColor: DsColor.line,
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-          decoration: BoxDecoration(
-            color: AppTheme.surface,
-            borderRadius: AppRadius.small,
-            border: Border.all(color: AppTheme.borderDim),
-          ),
           child: Text(
             line,
             style: TextStyle(
@@ -505,6 +505,41 @@ class StepContent extends StatelessWidget {
   }
 }
 
+/// Strips a leading OS emoji (`✅`, `🔄`, `⚠️`, `📱`) from guide copy and maps
+/// it to its corresponding Aseprite frame index in [PixelArtAssets.inlineBadges].
+(int? frame, String text) _extractInlinePixelBadge(String raw) {
+  final trimmed = raw.trimLeft();
+  const pairs = <(String, int)>[
+    ('✅', 0),
+    ('🔄', 1),
+    ('⚠️', 2),
+    ('⚠', 2),
+    ('📱', 3),
+  ];
+  for (final (emoji, frame) in pairs) {
+    if (trimmed.startsWith(emoji)) {
+      return (frame, trimmed.substring(emoji.length).trimLeft());
+    }
+  }
+  return (null, raw);
+}
+
+class _InlinePixelBadge extends StatelessWidget {
+  final int frame;
+  final double scale;
+  const _InlinePixelBadge({required this.frame, this.scale = 1.45});
+
+  @override
+  Widget build(BuildContext context) {
+    return PixelSpriteAnimation(
+      spec: PixelArtAssets.inlineBadges,
+      fixedFrame: frame,
+      playing: false,
+      scale: scale,
+    );
+  }
+}
+
 class _StepCard extends StatelessWidget {
   final int number;
   final String text;
@@ -518,40 +553,46 @@ class _StepCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.05),
-        borderRadius: AppRadius.medium,
-        border: Border.all(color: color.withValues(alpha: 0.18)),
+    final (badgeFrame, cleanText) = _extractInlinePixelBadge(text);
+    return PixelFrame(
+      notch: 3.0,
+      fillColor: Color.alphaBlend(
+        color.withValues(alpha: 0.06),
+        DsColor.surface.withValues(alpha: 0.78),
       ),
+      borderColor: color.withValues(alpha: 0.24),
+      padding: const EdgeInsets.all(14),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
             width: 30,
             height: 30,
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.18),
-              border: Border.all(color: color.withValues(alpha: 0.40)),
-            ),
-            child: Center(
-              child: Text(
-                '$number',
-                style: TextStyle(
-                  color: color,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
+            child: PixelFrame(
+              notch: 2.0,
+              fillColor: color.withValues(alpha: 0.18),
+              borderColor: color.withValues(alpha: 0.45),
+              child: Center(
+                child: Text(
+                  '$number',
+                  style: DsType.pixelTag.copyWith(color: color, fontSize: 12),
                 ),
               ),
             ),
           ),
           const SizedBox(width: 12),
+          if (badgeFrame != null) ...[
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: _InlinePixelBadge(frame: badgeFrame),
+            ),
+            const SizedBox(width: 8),
+          ],
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 5),
               child: Text(
-                text,
+                cleanText,
                 style: TextStyle(
                   color: AppTheme.textPrimary,
                   fontSize: 14,
@@ -573,28 +614,36 @@ class _BulletCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final (badgeFrame, cleanText) = _extractInlinePixelBadge(text);
+    return PixelFrame(
+      notch: 2.5,
+      recessed: true,
+      fillColor: DsColor.surface.withValues(alpha: 0.76),
+      borderColor: DsColor.line,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-      decoration: BoxDecoration(
-        color: AppTheme.surface,
-        borderRadius: AppRadius.small,
-        border: Border.all(color: AppTheme.borderDim),
-      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 7),
-            child: Container(
-              width: 5,
-              height: 5,
-              decoration: BoxDecoration(color: color.withValues(alpha: 0.65)),
+          if (badgeFrame != null) ...[
+            Padding(
+              padding: const EdgeInsets.only(top: 3),
+              child: _InlinePixelBadge(frame: badgeFrame),
             ),
-          ),
-          const SizedBox(width: 12),
+            const SizedBox(width: 10),
+          ] else ...[
+            Padding(
+              padding: const EdgeInsets.only(top: 7),
+              child: Container(
+                width: 5,
+                height: 5,
+                color: color.withValues(alpha: 0.72),
+              ),
+            ),
+            const SizedBox(width: 12),
+          ],
           Expanded(
             child: Text(
-              text,
+              cleanText,
               style: TextStyle(
                 color: AppTheme.textSecondary,
                 fontSize: 13,
@@ -615,27 +664,24 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final (badgeFrame, cleanText) = _extractInlinePixelBadge(text);
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: Row(
         children: [
-          Container(
-            width: 3,
-            height: 16,
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
+          Container(width: 3, height: 16, color: color),
           const SizedBox(width: 8),
+          if (badgeFrame != null) ...[
+            _InlinePixelBadge(frame: badgeFrame, scale: 1.4),
+            const SizedBox(width: 7),
+          ],
           Flexible(
             child: Text(
-              text,
-              style: TextStyle(
+              cleanText,
+              style: DsType.pixelTag.copyWith(
                 color: color,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.1,
+                fontSize: 11.5,
+                letterSpacing: 1.0,
               ),
             ),
           ),
@@ -652,24 +698,40 @@ class _NoteBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isWarning = text.startsWith('⚠️');
+    final (badgeFrame, cleanText) = _extractInlinePixelBadge(text);
+    final isWarning = badgeFrame == 2 || text.startsWith('⚠️');
     final bubbleColor = isWarning ? AppTheme.warning : AppTheme.success;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-      decoration: BoxDecoration(
-        color: bubbleColor.withValues(alpha: 0.07),
-        borderRadius: AppRadius.small,
-        border: Border.all(color: bubbleColor.withValues(alpha: 0.25)),
+    return PixelFrame(
+      notch: 3.0,
+      fillColor: Color.alphaBlend(
+        bubbleColor.withValues(alpha: 0.08),
+        DsColor.surface.withValues(alpha: 0.82),
       ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: bubbleColor,
-          fontSize: 13,
-          height: 1.6,
-          fontWeight: FontWeight.w500,
-        ),
+      borderColor: bubbleColor.withValues(alpha: 0.34),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (badgeFrame != null) ...[
+            Padding(
+              padding: const EdgeInsets.only(top: 3),
+              child: _InlinePixelBadge(frame: badgeFrame, scale: 1.45),
+            ),
+            const SizedBox(width: 10),
+          ],
+          Expanded(
+            child: Text(
+              cleanText,
+              style: TextStyle(
+                color: bubbleColor,
+                fontSize: 13,
+                height: 1.6,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

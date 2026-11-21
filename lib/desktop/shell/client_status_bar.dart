@@ -25,12 +25,16 @@ class ClientStatusBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
+    final barBg = Color.alphaBlend(
+      Colors.black.withValues(alpha: 0.28),
+      DsColor.bg,
+    );
     return Container(
       height: height,
       padding: const EdgeInsets.symmetric(horizontal: DsSpace.lg),
       decoration: BoxDecoration(
-        color: DsColor.surfaceQuiet,
-        border: Border(top: BorderSide(color: DsColor.line)),
+        color: barBg,
+        border: Border(top: BorderSide(color: DsColor.lineStrong)),
       ),
       child: ValueListenableBuilder<bool>(
         valueListenable: broadcasting,
@@ -48,7 +52,7 @@ class ClientStatusBar extends StatelessWidget {
                   serverName!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: DsType.label.copyWith(color: DsColor.textSoft),
+                  style: DsType.mono.copyWith(color: DsColor.textSoft),
                 ),
               ),
             ] else
@@ -58,7 +62,7 @@ class ClientStatusBar extends StatelessWidget {
               builder: (_, open, _) => DsButton(
                 label: l.console,
                 icon: Icons.terminal_rounded,
-                tone: open ? DsButtonTone.accent : DsButtonTone.quiet,
+                tone: open ? DsButtonTone.accent : DsButtonTone.neutral,
                 size: DsButtonSize.small,
                 onPressed: onToggleConsole,
               ),

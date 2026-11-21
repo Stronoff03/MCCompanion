@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../design/design.dart';
 import '../layout/bar_inset.dart';
+import '../widgets/pixel_art/pixel_art.dart';
 
 class DesktopGuideTopic {
   final String id;
@@ -10,6 +11,7 @@ class DesktopGuideTopic {
   final String subtitle;
   final FaIconData icon;
   final IconData rowIcon;
+  final int? pixelIconFrame;
   final Color color;
   final WidgetBuilder content;
 
@@ -19,6 +21,7 @@ class DesktopGuideTopic {
     required this.subtitle,
     required this.icon,
     required this.rowIcon,
+    this.pixelIconFrame,
     required this.color,
     required this.content,
   });
@@ -76,6 +79,7 @@ class _DesktopGuideScreenState extends State<DesktopGuideScreen> {
             Container(
               width: DesktopGuideScreen.listWidth,
               decoration: BoxDecoration(
+                color: DsColor.bg.withValues(alpha: 0.68),
                 border: Border(right: BorderSide(color: DsColor.line)),
               ),
               child: Column(
@@ -104,6 +108,46 @@ class _DesktopGuideScreenState extends State<DesktopGuideScreen> {
                     Padding(
                       padding: const EdgeInsets.all(DsSpace.md),
                       child: widget.listFooter,
+                    )
+                  else
+                    ValueListenableBuilder<bool>(
+                      valueListenable: PixelArtSettings.instance.effectsEnabled,
+                      builder: (_, effectsOn, _) {
+                        if (!effectsOn) return const SizedBox.shrink();
+                        return Padding(
+                          padding: const EdgeInsets.all(DsSpace.md),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: DsSpace.md,
+                              vertical: DsSpace.sm,
+                            ),
+                            decoration: BoxDecoration(
+                              color: DsColor.surfaceQuiet.withValues(alpha: 0.72),
+                              borderRadius: DsRadius.controlR,
+                              border: Border.all(color: DsColor.line),
+                            ),
+                            child: Row(
+                              children: [
+                                const PixelSpriteAnimation(
+                                  spec: PixelArtAssets.enchantedBook,
+                                  scale: 0.85,
+                                  playing: false,
+                                  fixedFrame: 0,
+                                ),
+                                const SizedBox(width: DsSpace.sm),
+                                Expanded(
+                                  child: Text(
+                                    widget.title,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: DsType.caption,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                 ],
               ),
@@ -123,15 +167,18 @@ class _DesktopGuideScreenState extends State<DesktopGuideScreen> {
           title: topic.title,
           subtitle: topic.subtitle,
           actions: [
-            Container(
-              width: 36,
-              height: 36,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: topic.color.withValues(alpha: 0.14),
-                borderRadius: DsRadius.controlR,
+            SizedBox(
+              width: 38,
+              height: 38,
+              child: PixelFrame(
+                notch: 3.0,
+                fillColor: topic.color.withValues(alpha: 0.14),
+                borderColor: topic.color.withValues(alpha: 0.45),
+                topHighlightColor: topic.color.withValues(alpha: 0.22),
+                child: Center(
+                  child: _GuideTopicIcon(topic: topic, scale: 1.4),
+                ),
               ),
-              child: FaIcon(topic.icon, size: 15, color: topic.color),
             ),
           ],
         ),
@@ -149,12 +196,51 @@ class _DesktopGuideScreenState extends State<DesktopGuideScreen> {
                 constraints: const BoxConstraints(
                   maxWidth: DesktopGuideScreen.articleWidth,
                 ),
-                child: topic.content(context),
+                child: PixelFrame(
+                  notch: 4.0,
+                  showRivets: true,
+                  fillColor: DsColor.surface.withValues(alpha: 0.90),
+                  borderColor: DsColor.lineStrong,
+                  topHighlightColor: Colors.white.withValues(alpha: 0.05),
+                  bottomLipColor: Colors.black.withValues(alpha: 0.45),
+                  bottomLipHeight: 2.5,
+                  padding: const EdgeInsets.all(DsSpace.xl),
+                  child: topic.content(context),
+                ),
               ),
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _GuideTopicIcon extends StatelessWidget {
+  final DesktopGuideTopic topic;
+  final double scale;
+
+  const _GuideTopicIcon({required this.topic, this.scale = 1.35});
+
+  @override
+  Widget build(BuildContext context) {
+    final frame = topic.pixelIconFrame;
+    if (frame == null) {
+      return Icon(topic.rowIcon, size: 18, color: topic.color);
+    }
+    return ValueListenableBuilder<bool>(
+      valueListenable: PixelArtSettings.instance.effectsEnabled,
+      builder: (_, effectsOn, _) {
+        if (!effectsOn) {
+          return Icon(topic.rowIcon, size: 18, color: topic.color);
+        }
+        return PixelSpriteAnimation(
+          spec: PixelArtAssets.guideIcons,
+          fixedFrame: frame,
+          playing: false,
+          scale: scale,
+        );
+      },
     );
   }
 }
@@ -173,31 +259,41 @@ class _TopicTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: DsSpace.xs),
+      padding: const EdgeInsets.only(bottom: DsSpace.xs + 2),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: DsRadius.controlR,
-          child: AnimatedContainer(
-            duration: DsDuration.fast,
+          customBorder: const PixelNotchedBorder(notch: 3.0),
+          child: PixelFrame(
+            notch: 3.0,
+            recessed: !active,
+            fillColor: active
+                ? DsColor.accent.withValues(alpha: 0.15)
+                : DsColor.surfaceQuiet.withValues(alpha: 0.45),
+            borderColor: active
+                ? DsColor.accent.withValues(alpha: 0.48)
+                : DsColor.line.withValues(alpha: 0.55),
+            topHighlightColor: active
+                ? DsColor.accent.withValues(alpha: 0.20)
+                : null,
+            bottomLipColor: active ? Colors.black.withValues(alpha: 0.35) : null,
+            bottomLipHeight: active ? 2.0 : 0,
             padding: const EdgeInsets.all(DsSpace.md),
-            decoration: BoxDecoration(
-              color: active
-                  ? DsColor.accent.withValues(alpha: 0.14)
-                  : Colors.transparent,
-              borderRadius: DsRadius.controlR,
-            ),
             child: Row(
               children: [
-                Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    color: topic.color.withValues(alpha: 0.14),
-                    borderRadius: DsRadius.controlR,
+                SizedBox(
+                  width: 36,
+                  height: 36,
+                  child: PixelFrame(
+                    notch: 2.5,
+                    recessed: !active,
+                    fillColor: topic.color.withValues(alpha: 0.14),
+                    borderColor: topic.color.withValues(
+                      alpha: active ? 0.52 : 0.28,
+                    ),
+                    child: Center(child: _GuideTopicIcon(topic: topic)),
                   ),
-                  child: Icon(topic.rowIcon, size: 18, color: topic.color),
                 ),
                 const SizedBox(width: DsSpace.md),
                 Expanded(
@@ -208,7 +304,8 @@ class _TopicTile extends StatelessWidget {
                         topic.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: DsType.bodyStrong.copyWith(
+                        style: DsType.heading.copyWith(
+                          fontSize: 13.5,
                           color: active ? DsColor.text : DsColor.textSoft,
                         ),
                       ),

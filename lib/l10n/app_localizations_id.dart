@@ -2084,4 +2084,129 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get feedbackRpNotice =>
       'Kami tidak membalas laporan tentang resource pack. Beberapa pack memang tidak berfungsi, dan beberapa server menolak pack kustom.';
+
+  @override
+  String get pixelStatusReady => 'SIAP';
+
+  @override
+  String get pixelStatusPortalActive => 'PORTAL AKTIF';
+
+  @override
+  String get relayRegionEuropeTag => 'EROPA • EU';
+
+  @override
+  String get relayRegionAmericaTag => 'AMERIKA • US';
+
+  @override
+  String get relayRegionDefaultTag => 'SERVER RELAY';
+
+  @override
+  String get pixelAtmosphereSection => 'ATMOSFER PIKSEL';
+
+  @override
+  String get pixelAnimationsTitle => 'Animasi Piksel';
+
+  @override
+  String get pixelAnimationsSubtitle =>
+      'Pemandangan cakrawala hidup, ikon piksel khusus, rune, dan efek portal';
+
+  @override
+  String get pixelAmbientBeesTitle => 'Lebah Ambien';
+
+  @override
+  String get pixelAmbientBeesSubtitle =>
+      'Lebah Minecraft interaktif yang terbang tenang di ruang kosong';
+
+  @override
+  String get pixelAutoTimeTitle => 'Latar otomatis sesuai waktu';
+
+  @override
+  String pixelAutoTimeActiveSubtitle(String biome) {
+    return 'Berubah otomatis sesuai jam · Sekarang: $biome';
+  }
+
+  @override
+  String get pixelAutoTimeInactiveSubtitle =>
+      'Berpindah otomatis antara Fajar, Siang, Senja, dan Malam sesuai waktu lokal';
+
+  @override
+  String get pixelBiomeSection => 'BIOMA LATAR BELAKANG';
+
+  @override
+  String get pixelBiomeAutoHint => '· Otomatis (pilih untuk mengunci)';
+
+  @override
+  String get pixelBiomeAutoLabel => 'Waktu Hari';
+
+  @override
+  String get pixelBiomeAutoSubtitle => 'Fajar, siang, senja, malam';
+
+  @override
+  String get pixelBiomeMorningLabel => 'Fajar Pagi';
+
+  @override
+  String get pixelBiomeMorningSubtitle => 'Matahari Terbit & Desa Berkabut';
+
+  @override
+  String get pixelBiomeDaylightLabel => 'Lembah Siang';
+
+  @override
+  String get pixelBiomeDaylightSubtitle => 'Awan & Kincir Angin';
+
+  @override
+  String get pixelBiomeSunsetLabel => 'Desa Senja';
+
+  @override
+  String get pixelBiomeSunsetSubtitle => 'Senja & Menara Lonceng';
+
+  @override
+  String get pixelBiomeNightLabel => 'Hutan Malam';
+
+  @override
+  String get pixelBiomeNightSubtitle => 'Piramida Suar & Danau';
+
+  @override
+  String get pixelBiomeNetherLabel => 'Nether Merah';
+
+  @override
+  String get pixelBiomeNetherSubtitle => 'Portal Kuno & Benteng';
+
+  @override
+  String get pixelBiomeEndLabel => 'Kehampaan End';
+
+  @override
+  String get pixelBiomeEndSubtitle => 'Kristal End & Telur Naga';
+
+  @override
+  String get serverPixelIconSection => 'IKON PIKSEL SERVER';
+
+  @override
+  String get serverIconGrass => 'Rumput';
+
+  @override
+  String get serverIconCampfire => 'Api';
+
+  @override
+  String get serverIconLantern => 'Lentera';
+
+  @override
+  String get serverIconChest => 'Peti';
+
+  @override
+  String get serverIconBook => 'Buku';
+
+  @override
+  String get serverIconSword => 'Pedang';
+
+  @override
+  String get serverIconPickaxe => 'Beliung';
+
+  @override
+  String get serverIconCrown => 'Mahkota';
+
+  @override
+  String get serverIconPortal => 'Portal';
+
+  @override
+  String get serverIconCreeper => 'Creeper';
 }

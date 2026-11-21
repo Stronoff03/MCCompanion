@@ -48,7 +48,7 @@ class _DesktopFeedbackScreenState extends State<DesktopFeedbackScreen> {
             Container(
               width: DesktopFeedbackScreen.listWidth,
               decoration: BoxDecoration(
-                color: DsColor.surfaceQuiet,
+                color: DsColor.surfaceQuiet.withValues(alpha: 0.90),
                 border: Border(left: BorderSide(color: DsColor.line)),
               ),
               child: MyFeedbackScreen(key: _listKey, embedded: true),

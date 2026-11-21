@@ -2083,4 +2083,130 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get feedbackRpNotice =>
       'রিসোর্স প্যাক নিয়ে করা রিপোর্টের আমরা উত্তর দিই না। কিছু প্যাক এমনিতেই কাজ করে না, আর কিছু সার্ভার কাস্টম প্যাক প্রত্যাখ্যান করে।';
+
+  @override
+  String get pixelStatusReady => 'প্রস্তুত';
+
+  @override
+  String get pixelStatusPortalActive => 'পোর্টাল সক্রিয়';
+
+  @override
+  String get relayRegionEuropeTag => 'ইউরোপ • EU';
+
+  @override
+  String get relayRegionAmericaTag => 'আমেরিকা • US';
+
+  @override
+  String get relayRegionDefaultTag => 'রিলে সার্ভার';
+
+  @override
+  String get pixelAtmosphereSection => 'পিক্সেল আবহ';
+
+  @override
+  String get pixelAnimationsTitle => 'পিক্সেল অ্যানিমেশন';
+
+  @override
+  String get pixelAnimationsSubtitle =>
+      'জীবন্ত দিগন্ত দৃশ্য, কাস্টম পিক্সেল আইকন, রুন ও পোর্টাল ইফেক্ট';
+
+  @override
+  String get pixelAmbientBeesTitle => 'পরিবেশের মৌমাছি';
+
+  @override
+  String get pixelAmbientBeesSubtitle =>
+      'খোলা জায়গায় শান্তভাবে উড়ে বেড়ানো ইন্টারঅ্যাক্টিভ Minecraft মৌমাছি';
+
+  @override
+  String get pixelAutoTimeTitle =>
+      'দিনের সময় অনুযায়ী স্বয়ংক্রিয় ব্যাকগ্রাউন্ড';
+
+  @override
+  String pixelAutoTimeActiveSubtitle(String biome) {
+    return 'ঘড়ি অনুযায়ী স্বয়ংক্রিয়ভাবে বদলায় · এখন: $biome';
+  }
+
+  @override
+  String get pixelAutoTimeInactiveSubtitle =>
+      'স্থানীয় সময় অনুযায়ী ভোর, দিন, সূর্যাস্ত ও রাতের মধ্যে স্বয়ংক্রিয়ভাবে বদলায়';
+
+  @override
+  String get pixelBiomeSection => 'ব্যাকগ্রাউন্ড বায়োম';
+
+  @override
+  String get pixelBiomeAutoHint => '· স্বয়ংক্রিয় (স্থির করতে নির্বাচন করুন)';
+
+  @override
+  String get pixelBiomeAutoLabel => 'দিনের সময়';
+
+  @override
+  String get pixelBiomeAutoSubtitle => 'ভোর, দুপুর, সন্ধ্যা, রাত';
+
+  @override
+  String get pixelBiomeMorningLabel => 'সকালের ভোর';
+
+  @override
+  String get pixelBiomeMorningSubtitle => 'সূর্যোদয় ও কুয়াশাচ্ছন্ন গ্রাম';
+
+  @override
+  String get pixelBiomeDaylightLabel => 'দিনের উপত্যকা';
+
+  @override
+  String get pixelBiomeDaylightSubtitle => 'মেঘ ও বায়ুকল';
+
+  @override
+  String get pixelBiomeSunsetLabel => 'সূর্যাস্তের গ্রাম';
+
+  @override
+  String get pixelBiomeSunsetSubtitle => 'সন্ধ্যা ও ঘণ্টাঘর';
+
+  @override
+  String get pixelBiomeNightLabel => 'রাতের বন';
+
+  @override
+  String get pixelBiomeNightSubtitle => 'বিকন পিরামিড ও হ্রদ';
+
+  @override
+  String get pixelBiomeNetherLabel => 'নেদার ক্রিমসন';
+
+  @override
+  String get pixelBiomeNetherSubtitle => 'প্রাচীন পোর্টাল ও দুর্গ';
+
+  @override
+  String get pixelBiomeEndLabel => 'এন্ড ভয়েড';
+
+  @override
+  String get pixelBiomeEndSubtitle => 'এন্ড ক্রিস্টাল ও ড্রাগন ডিম';
+
+  @override
+  String get serverPixelIconSection => 'সার্ভার পিক্সেল আইকন';
+
+  @override
+  String get serverIconGrass => 'ঘাস';
+
+  @override
+  String get serverIconCampfire => 'ক্যাম্প';
+
+  @override
+  String get serverIconLantern => 'লণ্ঠন';
+
+  @override
+  String get serverIconChest => 'সিন্দুক';
+
+  @override
+  String get serverIconBook => 'বই';
+
+  @override
+  String get serverIconSword => 'তলোয়ার';
+
+  @override
+  String get serverIconPickaxe => 'গাঁইতি';
+
+  @override
+  String get serverIconCrown => 'মুকুট';
+
+  @override
+  String get serverIconPortal => 'পোর্টাল';
+
+  @override
+  String get serverIconCreeper => 'ক্রিপার';
 }

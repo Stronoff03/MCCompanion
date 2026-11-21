@@ -2,13 +2,14 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../design/design.dart';
 import '../screens/server_detail_screen.dart';
 import '../util/partners_servers.dart';
 import '../services/server_status_service.dart';
 import '../services/theme_service.dart';
 import '../widgets/components/app_toast.dart';
+import '../widgets/pixel_art/pixel_art.dart';
 import '../l10n/app_localizations.dart';
-import '../theme/app_tokens.dart';
 
 class FeaturedServerHero extends StatefulWidget {
   static const double defaultHeight = 190;
@@ -168,8 +169,17 @@ class _FeaturedServerHeroState extends State<FeaturedServerHero> {
         final boxWidth = constraints.maxWidth.isFinite
             ? constraints.maxWidth
             : MediaQuery.sizeOf(context).width;
-        return ClipRRect(
-          borderRadius: widget.borderRadius,
+        return PixelFrame(
+          notch: 4.5,
+          showRivets: true,
+          fillColor: DsColor.surface.withValues(alpha: 0.93),
+          borderColor: Color.alphaBlend(
+            Colors.white.withValues(alpha: 0.12),
+            DsColor.surface,
+          ),
+          topHighlightColor: Colors.white.withValues(alpha: 0.08),
+          bottomLipColor: Colors.black.withValues(alpha: 0.45),
+          bottomLipHeight: 3.0,
           child: SizedBox(
             height:
                 widget.height +
@@ -216,16 +226,13 @@ class _FeaturedServerHeroState extends State<FeaturedServerHero> {
                               final active =
                                   i == _heroBgPage % _featuredServers.length;
                               return AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
+                                duration: const Duration(milliseconds: 220),
                                 margin: const EdgeInsets.only(left: 4),
                                 width: active ? 14 : 5,
                                 height: 5,
-                                decoration: BoxDecoration(
-                                  color: active
-                                      ? Colors.white
-                                      : Colors.white.withValues(alpha: 0.25),
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
+                                color: active
+                                    ? DsColor.accent
+                                    : Colors.white.withValues(alpha: 0.22),
                               );
                             },
                           ),
@@ -253,7 +260,18 @@ class _FeaturedServerHeroState extends State<FeaturedServerHero> {
         return Stack(
           fit: StackFit.expand,
           children: [
-            Container(color: ThemeService.instance.background),
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[
+                    Colors.transparent,
+                    DsColor.accent.withValues(alpha: 0.07),
+                  ],
+                ),
+              ),
+            ),
             if (hasIcon) ...[
               Align(
                 alignment: Alignment.centerRight,
@@ -295,12 +313,7 @@ class _FeaturedServerHeroState extends State<FeaturedServerHero> {
                             constraints: BoxConstraints(maxWidth: textWidth),
                             child: Text(
                               server?.name ?? 'MCCompanion',
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w800,
-                                height: 1.15,
-                                color: ThemeService.instance.textPrimary,
-                              ),
+                              style: DsType.title.copyWith(fontSize: 22),
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -398,9 +411,16 @@ class _FeaturedServerHeroState extends State<FeaturedServerHero> {
   ) {
     final disabled = server == null || broadcasting;
     return GestureDetector(
-      onTap: disabled
+      onTapUp: disabled
           ? null
-          : () {
+          : (details) {
+              PixelParticleOverlay.burst(
+                context,
+                details.globalPosition,
+                preset: PixelParticlePreset.grassBlock,
+                count: 8,
+                popGrassBlock: true,
+              );
               widget.ipController.text = server.address;
               widget.portController.text = server.port.toString();
               AppToast.show(
@@ -411,26 +431,41 @@ class _FeaturedServerHeroState extends State<FeaturedServerHero> {
               );
               widget.onSelected?.call();
             },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+      child: PixelFrame(
+        notch: 3.0,
+        fillColor: disabled
+            ? Colors.white.withValues(alpha: 0.08)
+            : AppTheme.accent,
+        borderColor: disabled
+            ? DsColor.line
+            : Color.alphaBlend(
+                Colors.white.withValues(alpha: 0.24),
+                AppTheme.accent,
+              ),
+        topHighlightColor: disabled
+            ? null
+            : Colors.white.withValues(alpha: 0.30),
+        bottomLipColor: disabled
+            ? null
+            : Color.alphaBlend(
+                Colors.black.withValues(alpha: 0.38),
+                AppTheme.accent,
+              ),
+        bottomLipHeight: disabled ? 0 : 2.5,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-        decoration: BoxDecoration(
-          color: disabled
-              ? Colors.white.withValues(alpha: 0.08)
-              : AppTheme.accent,
-          borderRadius: AppRadius.rounded,
-        ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               AppLocalizations.of(context)!.featuredServerPlay,
               style: TextStyle(
+                fontFamily: 'ChakraPetch',
                 color: disabled
                     ? ThemeService.instance.textPrimary.withValues(alpha: 0.35)
                     : Colors.black,
                 fontSize: 13,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.3,
               ),
             ),
             const SizedBox(width: 4),
@@ -448,13 +483,11 @@ class _FeaturedServerHeroState extends State<FeaturedServerHero> {
   }
 
   Widget _heroBadge({required IconData icon, required String label}) {
-    return Container(
+    return PixelFrame(
+      notch: 2.0,
+      fillColor: Colors.black.withValues(alpha: 0.42),
+      borderColor: DsColor.accent.withValues(alpha: 0.32),
       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.45),
-        borderRadius: AppRadius.large,
-        border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
-      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -463,10 +496,11 @@ class _FeaturedServerHeroState extends State<FeaturedServerHero> {
           Text(
             label,
             style: TextStyle(
+              fontFamily: 'JetBrainsMono',
               color: ThemeService.instance.textPrimary,
               fontSize: 10,
               fontWeight: FontWeight.w700,
-              letterSpacing: 1.2,
+              letterSpacing: 1.0,
             ),
           ),
         ],
@@ -475,25 +509,20 @@ class _FeaturedServerHeroState extends State<FeaturedServerHero> {
   }
 
   Widget _staticStatusBadge({required Color dot, required String label}) {
-    return Container(
+    return PixelFrame(
+      notch: 2.0,
+      fillColor: Colors.black.withValues(alpha: 0.42),
+      borderColor: Colors.white.withValues(alpha: 0.14),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.45),
-        borderRadius: AppRadius.large,
-        border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
-      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: BoxDecoration(color: dot, shape: BoxShape.circle),
-          ),
+          Container(width: 5, height: 5, color: dot),
           const SizedBox(width: 6),
           Text(
             label,
             style: const TextStyle(
+              fontFamily: 'JetBrainsMono',
               color: Colors.white,
               fontSize: 11,
               fontWeight: FontWeight.w600,
@@ -546,25 +575,20 @@ class _HeroStatusBadge extends StatelessWidget {
     required String label,
     required String? sub,
   }) {
-    return Container(
+    return PixelFrame(
+      notch: 2.0,
+      fillColor: Colors.black.withValues(alpha: 0.42),
+      borderColor: Colors.white.withValues(alpha: 0.14),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.45),
-        borderRadius: AppRadius.large,
-        border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
-      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: BoxDecoration(color: dot, shape: BoxShape.circle),
-          ),
+          Container(width: 5, height: 5, color: dot),
           const SizedBox(width: 6),
           Text(
             label,
             style: const TextStyle(
+              fontFamily: 'JetBrainsMono',
               color: Colors.white,
               fontSize: 11,
               fontWeight: FontWeight.w600,

@@ -6,11 +6,13 @@ import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../widgets/components/swipe_back.dart';
 import '../widgets/dialogs/howto_dialogs.dart';
+import '../widgets/pixel_art/pixel_art.dart';
 import '../layout/bar_inset.dart';
 
 class SupportTopic {
   final FaIconData icon;
   final IconData rowIcon;
+  final int pixelIconFrame;
   final Color color;
   final String title;
   final String subtitle;
@@ -19,6 +21,7 @@ class SupportTopic {
   const SupportTopic({
     required this.icon,
     required this.rowIcon,
+    required this.pixelIconFrame,
     required this.color,
     required this.title,
     required this.subtitle,
@@ -30,6 +33,7 @@ List<SupportTopic> supportTopics(AppLocalizations l) => [
   SupportTopic(
     icon: FontAwesomeIcons.wifi,
     rowIcon: Icons.wifi_rounded,
+    pixelIconFrame: 0,
     color: AppTheme.info,
     title: l.helpMCCompanionTitle,
     subtitle: l.helpMCCompanionSubtitle,
@@ -38,6 +42,7 @@ List<SupportTopic> supportTopics(AppLocalizations l) => [
   SupportTopic(
     icon: FontAwesomeIcons.triangleExclamation,
     rowIcon: Icons.warning_amber_rounded,
+    pixelIconFrame: 1,
     color: AppTheme.warning,
     title: l.helpMultiplayerFailedTitle,
     subtitle: l.helpMultiplayerFailedSubtitle,
@@ -46,6 +51,7 @@ List<SupportTopic> supportTopics(AppLocalizations l) => [
   SupportTopic(
     icon: FontAwesomeIcons.userGroup,
     rowIcon: Icons.group_rounded,
+    pixelIconFrame: 2,
     color: AppTheme.modeFriends,
     title: l.helpFriendsModeTitle,
     subtitle: l.helpFriendsModeSubtitle,
@@ -102,12 +108,25 @@ class _SupportScreenState extends State<SupportScreen> {
                 label: l.sectionHelp,
                 children: [
                   for (final topic in supportTopics(l))
-                    DsRow(
-                      title: topic.title,
-                      subtitle: topic.subtitle,
-                      icon: topic.rowIcon,
-                      iconColor: topic.color,
-                      onTap: () => setState(() => _open = topic),
+                    ValueListenableBuilder<bool>(
+                      valueListenable:
+                          PixelArtSettings.instance.effectsEnabled,
+                      builder: (_, effectsOn, _) => DsRow(
+                        title: topic.title,
+                        subtitle: topic.subtitle,
+                        icon: topic.rowIcon,
+                        customIcon: effectsOn
+                            ? PixelSpriteAnimation(
+                                spec: PixelArtAssets.guideIcons,
+                                fixedFrame: topic.pixelIconFrame,
+                                playing: false,
+                                width: 22,
+                                height: 22,
+                              )
+                            : null,
+                        iconColor: topic.color,
+                        onTap: () => setState(() => _open = topic),
+                      ),
                     ),
                 ],
               ),
@@ -140,15 +159,41 @@ class _SupportScreenState extends State<SupportScreen> {
             onPressed: () => setState(() => _open = null),
           ),
           actions: [
-            Container(
-              width: 36,
-              height: 36,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: topic.color.withValues(alpha: 0.14),
-                borderRadius: DsRadius.controlR,
-              ),
-              child: FaIcon(topic.icon, size: 15, color: topic.color),
+            ValueListenableBuilder<bool>(
+              valueListenable: PixelArtSettings.instance.effectsEnabled,
+              builder: (_, effectsOn, _) {
+                if (!effectsOn) {
+                  return Container(
+                    width: 36,
+                    height: 36,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: topic.color.withValues(alpha: 0.14),
+                      borderRadius: DsRadius.controlR,
+                    ),
+                    child: FaIcon(topic.icon, size: 15, color: topic.color),
+                  );
+                }
+                return PixelFrame(
+                  notch: 2.5,
+                  recessed: true,
+                  fillColor: topic.color.withValues(alpha: 0.14),
+                  borderColor: topic.color.withValues(alpha: 0.36),
+                  child: SizedBox(
+                    width: 36,
+                    height: 36,
+                    child: Center(
+                      child: PixelSpriteAnimation(
+                        spec: PixelArtAssets.guideIcons,
+                        fixedFrame: topic.pixelIconFrame,
+                        playing: false,
+                        width: 22,
+                        height: 22,
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),

@@ -2085,4 +2085,129 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get feedbackRpNotice =>
       'ہم ریسورس پیک سے متعلق رپورٹس کا جواب نہیں دیتے۔ کچھ پیک بس کام نہیں کرتے، اور کچھ سرور حسبِ ضرورت پیک مسترد کر دیتے ہیں۔';
+
+  @override
+  String get pixelStatusReady => 'تیار';
+
+  @override
+  String get pixelStatusPortalActive => 'پورٹل فعال';
+
+  @override
+  String get relayRegionEuropeTag => 'یورپ • EU';
+
+  @override
+  String get relayRegionAmericaTag => 'امریکہ • US';
+
+  @override
+  String get relayRegionDefaultTag => 'ریلے سرور';
+
+  @override
+  String get pixelAtmosphereSection => 'پکسل ماحول';
+
+  @override
+  String get pixelAnimationsTitle => 'پکسل اینیمیشنز';
+
+  @override
+  String get pixelAnimationsSubtitle =>
+      'زندہ افق کا منظر، خاص پکسل آئیکنز، رُونز اور پورٹل اثرات';
+
+  @override
+  String get pixelAmbientBeesTitle => 'ماحول کی مکھیاں';
+
+  @override
+  String get pixelAmbientBeesSubtitle =>
+      'خالی جگہوں میں سکون سے اڑتی انٹرایکٹو مائن کرافٹ مکھی';
+
+  @override
+  String get pixelAutoTimeTitle => 'دن کے وقت کے مطابق خودکار پس منظر';
+
+  @override
+  String pixelAutoTimeActiveSubtitle(String biome) {
+    return 'گھڑی کے مطابق خودکار بدلتا ہے · ابھی: $biome';
+  }
+
+  @override
+  String get pixelAutoTimeInactiveSubtitle =>
+      'مقامی وقت کے مطابق صبح، دوپہر، غروب اور رات کے درمیان خودکار بدلتا ہے';
+
+  @override
+  String get pixelBiomeSection => 'پس منظر کا بایوم';
+
+  @override
+  String get pixelBiomeAutoHint => '· خودکار (مقرر کرنے کے لیے منتخب کریں)';
+
+  @override
+  String get pixelBiomeAutoLabel => 'دن کا وقت';
+
+  @override
+  String get pixelBiomeAutoSubtitle => 'صبح، دوپہر، شام، رات';
+
+  @override
+  String get pixelBiomeMorningLabel => 'صبح کی سحر';
+
+  @override
+  String get pixelBiomeMorningSubtitle => 'طلوع آفتاب اور دھندلا گاؤں';
+
+  @override
+  String get pixelBiomeDaylightLabel => 'دن کی وادی';
+
+  @override
+  String get pixelBiomeDaylightSubtitle => 'بادل اور پون چکی';
+
+  @override
+  String get pixelBiomeSunsetLabel => 'غروب کا گاؤں';
+
+  @override
+  String get pixelBiomeSunsetSubtitle => 'شام اور گھنٹہ گھر';
+
+  @override
+  String get pixelBiomeNightLabel => 'رات کا جنگل';
+
+  @override
+  String get pixelBiomeNightSubtitle => 'بیکن اہرام اور جھیل';
+
+  @override
+  String get pixelBiomeNetherLabel => 'نیدر قرمزی';
+
+  @override
+  String get pixelBiomeNetherSubtitle => 'قدیم پورٹل اور قلعہ';
+
+  @override
+  String get pixelBiomeEndLabel => 'اینڈ کا خلا';
+
+  @override
+  String get pixelBiomeEndSubtitle => 'اینڈ کرسٹلز اور ڈریگن انڈا';
+
+  @override
+  String get serverPixelIconSection => 'سرور پکسل آئیکن';
+
+  @override
+  String get serverIconGrass => 'گھاس';
+
+  @override
+  String get serverIconCampfire => 'الاؤ';
+
+  @override
+  String get serverIconLantern => 'لالٹین';
+
+  @override
+  String get serverIconChest => 'صندوق';
+
+  @override
+  String get serverIconBook => 'کتاب';
+
+  @override
+  String get serverIconSword => 'تلوار';
+
+  @override
+  String get serverIconPickaxe => 'کدال';
+
+  @override
+  String get serverIconCrown => 'تاج';
+
+  @override
+  String get serverIconPortal => 'پورٹل';
+
+  @override
+  String get serverIconCreeper => 'کریپر';
 }

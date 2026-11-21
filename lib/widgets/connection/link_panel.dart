@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../design/design.dart';
 import '../../util/user_servers.dart';
+import '../pixel_art/pixel_art.dart';
 
 class LinkOption<T> {
   final T value;
@@ -131,15 +132,20 @@ class _LinkPanelState<T> extends State<LinkPanel<T>>
     final selected = _selected;
     final hasAddress = widget.selectedAddress.isNotEmpty;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: DsColor.surface,
-        borderRadius: DsRadius.cardR,
-        border: Border.all(
-          color: active ? DsColor.accent.withValues(alpha: 0.55) : DsColor.line,
-        ),
-      ),
-      clipBehavior: Clip.antiAlias,
+    return PixelFrame(
+      notch: 4.5,
+      showRivets: true,
+      enableTexture: true,
+      fillColor: DsColor.surface.withValues(alpha: 0.92),
+      borderColor: active
+          ? DsColor.accent.withValues(alpha: 0.65)
+          : DsColor.lineStrong,
+      topHighlightColor: active
+          ? DsColor.accent.withValues(alpha: 0.22)
+          : Colors.white.withValues(alpha: 0.06),
+      bottomLipColor: Colors.black.withValues(alpha: 0.45),
+      bottomLipHeight: 3.0,
+      rivetColor: active ? DsColor.accent.withValues(alpha: 0.60) : null,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -158,6 +164,16 @@ class _LinkPanelState<T> extends State<LinkPanel<T>>
             side: _LinkSide.server,
             label: widget.serverTitle,
             icon: Icons.dns_rounded,
+            customIcon: hasAddress
+                ? _buildServerPixelGlyph(
+                    address: widget.selectedAddress,
+                    port: widget.selectedPort ?? 19132,
+                    fallbackIndex: selected == null
+                        ? 0
+                        : widget.servers.indexOf(selected).clamp(0, 999),
+                    size: 22,
+                  )
+                : null,
             title:
                 selected?.name ??
                 (hasAddress
@@ -320,6 +336,7 @@ class _LinkPanelState<T> extends State<LinkPanel<T>>
     required _LinkSide side,
     required String label,
     required IconData icon,
+    Widget? customIcon,
     required String title,
     required String? subtitle,
     required bool topRail,
@@ -373,11 +390,13 @@ class _LinkPanelState<T> extends State<LinkPanel<T>>
                                   : DsColor.line,
                             ),
                           ),
-                          child: Icon(
-                            icon,
-                            size: 17,
-                            color: active ? DsColor.accent : DsColor.accent,
-                          ),
+                          child:
+                              customIcon ??
+                              Icon(
+                                icon,
+                                size: 17,
+                                color: active ? DsColor.accent : DsColor.accent,
+                              ),
                         ),
                       ),
                     ),
@@ -490,20 +509,62 @@ class _LinkPanelState<T> extends State<LinkPanel<T>>
     );
   }
 
+  Widget _buildServerPixelGlyph({
+    required String address,
+    required int port,
+    required int fallbackIndex,
+    required double size,
+  }) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: PixelArtSettings.instance.effectsEnabled,
+      builder: (_, effectsOn, _) {
+        if (!effectsOn) {
+          return Icon(Icons.dns_rounded, size: 17, color: DsColor.accent);
+        }
+        return ValueListenableBuilder<int>(
+          valueListenable: PixelArtSettings.instance.serverIconsRevision,
+          builder: (_, _, _) {
+            final iconId = PixelArtSettings.instance.getServerIconId(
+              address,
+              port,
+            );
+            final spec = PixelArtAssets.serverIconFor(
+              iconId,
+              fallbackIndex: fallbackIndex,
+            );
+            return PixelSpriteAnimation(
+              spec: spec,
+              width: size,
+              height: size,
+              playing: false,
+              fixedFrame: 0,
+            );
+          },
+        );
+      },
+    );
+  }
+
   Widget _serverOptions() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        for (final server in widget.servers)
+        for (var i = 0; i < widget.servers.length; i++)
           _optionRow(
             icon: Icons.dns_rounded,
-            title: server.name,
-            subtitle: '${server.address}:${server.port}',
+            customIcon: _buildServerPixelGlyph(
+              address: widget.servers[i].address,
+              port: widget.servers[i].port,
+              fallbackIndex: i,
+              size: 20,
+            ),
+            title: widget.servers[i].name,
+            subtitle: '${widget.servers[i].address}:${widget.servers[i].port}',
             selected:
-                server.address == widget.selectedAddress &&
-                server.port == widget.selectedPort,
+                widget.servers[i].address == widget.selectedAddress &&
+                widget.servers[i].port == widget.selectedPort,
             onTap: () {
-              widget.onServerSelected(server);
+              widget.onServerSelected(widget.servers[i]);
               setState(() => _open = _LinkSide.none);
             },
           ),
@@ -526,6 +587,7 @@ class _LinkPanelState<T> extends State<LinkPanel<T>>
 
   Widget _optionRow({
     required IconData icon,
+    Widget? customIcon,
     required String title,
     required String? subtitle,
     required bool selected,
@@ -548,11 +610,12 @@ class _LinkPanelState<T> extends State<LinkPanel<T>>
             children: [
               if (choice) _radio(selected) else const SizedBox(width: 18),
               const SizedBox(width: DsSpace.md - 2),
-              Icon(
-                icon,
-                size: 18,
-                color: selected ? DsColor.accent : DsColor.textFaint,
-              ),
+              customIcon ??
+                  Icon(
+                    icon,
+                    size: 18,
+                    color: selected ? DsColor.accent : DsColor.textFaint,
+                  ),
               const SizedBox(width: DsSpace.md),
               Expanded(
                 child: Column(

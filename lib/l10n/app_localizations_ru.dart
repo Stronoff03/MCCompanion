@@ -2077,4 +2077,129 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get feedbackRpNotice =>
       'Мы не отвечаем на обращения о ресурспаках. Некоторые паки просто не работают, а некоторые серверы отклоняют пользовательские паки.';
+
+  @override
+  String get pixelStatusReady => 'ГОТОВО';
+
+  @override
+  String get pixelStatusPortalActive => 'ПОРТАЛ АКТИВЕН';
+
+  @override
+  String get relayRegionEuropeTag => 'ЕВРОПА • EU';
+
+  @override
+  String get relayRegionAmericaTag => 'АМЕРИКА • US';
+
+  @override
+  String get relayRegionDefaultTag => 'РЕТРАНСЛЯТОР';
+
+  @override
+  String get pixelAtmosphereSection => 'ПИКСЕЛЬНАЯ АТМОСФЕРА';
+
+  @override
+  String get pixelAnimationsTitle => 'Пиксельные анимации';
+
+  @override
+  String get pixelAnimationsSubtitle =>
+      'Живой горизонт, пиксельные иконки, руны и эффекты портала';
+
+  @override
+  String get pixelAmbientBeesTitle => 'Фоновые пчёлы';
+
+  @override
+  String get pixelAmbientBeesSubtitle =>
+      'Интерактивная пчела Minecraft, спокойно летающая по свободным зонам';
+
+  @override
+  String get pixelAutoTimeTitle => 'Автоматический фон по времени суток';
+
+  @override
+  String pixelAutoTimeActiveSubtitle(String biome) {
+    return 'Меняется автоматически по часам · Сейчас: $biome';
+  }
+
+  @override
+  String get pixelAutoTimeInactiveSubtitle =>
+      'Автоматически переключается между Рассветом, Днём, Закатом и Ночью';
+
+  @override
+  String get pixelBiomeSection => 'ФОНОВЫЙ БИОМ';
+
+  @override
+  String get pixelBiomeAutoHint => '· Авто (выберите, чтобы закрепить)';
+
+  @override
+  String get pixelBiomeAutoLabel => 'Время суток';
+
+  @override
+  String get pixelBiomeAutoSubtitle => 'Рассвет, день, закат, ночь';
+
+  @override
+  String get pixelBiomeMorningLabel => 'Утренний рассвет';
+
+  @override
+  String get pixelBiomeMorningSubtitle => 'Восход и туманная деревня';
+
+  @override
+  String get pixelBiomeDaylightLabel => 'Дневная долина';
+
+  @override
+  String get pixelBiomeDaylightSubtitle => 'Облака и ветряная мельница';
+
+  @override
+  String get pixelBiomeSunsetLabel => 'Закат в деревне';
+
+  @override
+  String get pixelBiomeSunsetSubtitle => 'Сумерки и колокольня';
+
+  @override
+  String get pixelBiomeNightLabel => 'Ночной лес';
+
+  @override
+  String get pixelBiomeNightSubtitle => 'Пирамида маяка и озеро';
+
+  @override
+  String get pixelBiomeNetherLabel => 'Багровый Незер';
+
+  @override
+  String get pixelBiomeNetherSubtitle => 'Древний портал и крепость';
+
+  @override
+  String get pixelBiomeEndLabel => 'Пустота Энда';
+
+  @override
+  String get pixelBiomeEndSubtitle => 'Кристаллы Энда и яйцо';
+
+  @override
+  String get serverPixelIconSection => 'ПИКСЕЛЬНАЯ ИКОНКА СЕРВЕРА';
+
+  @override
+  String get serverIconGrass => 'Трава';
+
+  @override
+  String get serverIconCampfire => 'Костёр';
+
+  @override
+  String get serverIconLantern => 'Фонарь';
+
+  @override
+  String get serverIconChest => 'Сундук';
+
+  @override
+  String get serverIconBook => 'Книга';
+
+  @override
+  String get serverIconSword => 'Меч';
+
+  @override
+  String get serverIconPickaxe => 'Кирка';
+
+  @override
+  String get serverIconCrown => 'Корона';
+
+  @override
+  String get serverIconPortal => 'Портал';
+
+  @override
+  String get serverIconCreeper => 'Крипер';
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../design/design.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/console/console_widget.dart';
+import '../widgets/pixel_art/pixel_art.dart';
 
 class DesktopStatusPanel extends StatelessWidget {
   final bool broadcasting;
@@ -41,7 +42,7 @@ class DesktopStatusPanel extends StatelessWidget {
     return Container(
       width: 340,
       decoration: BoxDecoration(
-        color: DsColor.surfaceQuiet,
+        color: DsColor.surfaceQuiet.withValues(alpha: 0.94),
         border: Border(left: BorderSide(color: DsColor.line)),
       ),
       child: Column(
@@ -60,6 +61,21 @@ class DesktopStatusPanel extends StatelessWidget {
               children: [
                 Row(
                   children: [
+                    ValueListenableBuilder<bool>(
+                      valueListenable: PixelArtSettings.instance.effectsEnabled,
+                      builder: (_, effectsOn, _) {
+                        if (!effectsOn) return const SizedBox.shrink();
+                        return Padding(
+                          padding: const EdgeInsets.only(right: DsSpace.sm),
+                          child: PixelSpriteAnimation(
+                            spec: PixelArtAssets.lantern,
+                            scale: 0.95,
+                            playing: broadcasting,
+                            fixedFrame: broadcasting ? null : 0,
+                          ),
+                        );
+                      },
+                    ),
                     Expanded(child: Text(l.statusLabel, style: DsType.heading)),
                     DsBadge(
                       label: broadcasting ? l.statusOnline : l.rpDisabled,

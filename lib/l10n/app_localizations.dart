@@ -3887,6 +3887,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We can\'t answer reports about resource packs. Some packs simply don\'t work, and some servers reject custom packs.'**
   String get feedbackRpNotice;
+
+  /// Top bar status badge when idle/ready
+  ///
+  /// In en, this message translates to:
+  /// **'READY'**
+  String get pixelStatusReady;
+
+  /// Top bar status badge when LAN broadcast portal is active
+  ///
+  /// In en, this message translates to:
+  /// **'PORTAL ACTIVE'**
+  String get pixelStatusPortalActive;
+
+  /// Region badge for Europe relay server
+  ///
+  /// In en, this message translates to:
+  /// **'EUROPE • EU'**
+  String get relayRegionEuropeTag;
+
+  /// Region badge for America relay server
+  ///
+  /// In en, this message translates to:
+  /// **'AMERICA • US'**
+  String get relayRegionAmericaTag;
+
+  /// Fallback region badge for relay server
+  ///
+  /// In en, this message translates to:
+  /// **'RELAY SERVER'**
+  String get relayRegionDefaultTag;
+
+  /// Section title for pixel art atmosphere settings
+  ///
+  /// In en, this message translates to:
+  /// **'PIXEL ATMOSPHERE'**
+  String get pixelAtmosphereSection;
+
+  /// Toggle title for pixel art animations
+  ///
+  /// In en, this message translates to:
+  /// **'Pixel Animations'**
+  String get pixelAnimationsTitle;
+
+  /// Toggle subtitle for pixel art animations
+  ///
+  /// In en, this message translates to:
+  /// **'Living horizon scenery, custom pixel icons, runes, and portal effects'**
+  String get pixelAnimationsSubtitle;
+
+  /// Toggle title for ambient Minecraft bees
+  ///
+  /// In en, this message translates to:
+  /// **'Ambient Bees'**
+  String get pixelAmbientBeesTitle;
+
+  /// Toggle subtitle for ambient Minecraft bees
+  ///
+  /// In en, this message translates to:
+  /// **'Interactive Minecraft bee calmly wandering in open spaces'**
+  String get pixelAmbientBeesSubtitle;
+
+  /// Toggle title for automatic time-of-day background
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic background by time of day'**
+  String get pixelAutoTimeTitle;
+
+  /// Subtitle when automatic time-of-day background is enabled
+  ///
+  /// In en, this message translates to:
+  /// **'Changes automatically by clock · Now: {biome}'**
+  String pixelAutoTimeActiveSubtitle(String biome);
+
+  /// Subtitle when automatic time-of-day background is disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically shifts across Dawn, Daylight, Sunset, and Night by local time'**
+  String get pixelAutoTimeInactiveSubtitle;
+
+  /// Section title for background biome selection
+  ///
+  /// In en, this message translates to:
+  /// **'BACKGROUND BIOME'**
+  String get pixelBiomeSection;
+
+  /// Hint next to background biome section when auto mode is enabled
+  ///
+  /// In en, this message translates to:
+  /// **'· Auto (select one to lock)'**
+  String get pixelBiomeAutoHint;
+
+  /// Label for automatic time-of-day biome
+  ///
+  /// In en, this message translates to:
+  /// **'Time of Day'**
+  String get pixelBiomeAutoLabel;
+
+  /// Subtitle for automatic time-of-day biome
+  ///
+  /// In en, this message translates to:
+  /// **'Dawn, noon, sunset, night'**
+  String get pixelBiomeAutoSubtitle;
+
+  /// Label for Morning Dawn biome
+  ///
+  /// In en, this message translates to:
+  /// **'Morning Dawn'**
+  String get pixelBiomeMorningLabel;
+
+  /// Subtitle for Morning Dawn biome
+  ///
+  /// In en, this message translates to:
+  /// **'Sunrise & Misty Village'**
+  String get pixelBiomeMorningSubtitle;
+
+  /// Label for Daylight Valley biome
+  ///
+  /// In en, this message translates to:
+  /// **'Daylight Valley'**
+  String get pixelBiomeDaylightLabel;
+
+  /// Subtitle for Daylight Valley biome
+  ///
+  /// In en, this message translates to:
+  /// **'Clouds & Windmill'**
+  String get pixelBiomeDaylightSubtitle;
+
+  /// Label for Sunset Village biome
+  ///
+  /// In en, this message translates to:
+  /// **'Sunset Village'**
+  String get pixelBiomeSunsetLabel;
+
+  /// Subtitle for Sunset Village biome
+  ///
+  /// In en, this message translates to:
+  /// **'Dusk & Bell Tower'**
+  String get pixelBiomeSunsetSubtitle;
+
+  /// Label for Night Forest biome
+  ///
+  /// In en, this message translates to:
+  /// **'Night Forest'**
+  String get pixelBiomeNightLabel;
+
+  /// Subtitle for Night Forest biome
+  ///
+  /// In en, this message translates to:
+  /// **'Beacon Pyramid & Lake'**
+  String get pixelBiomeNightSubtitle;
+
+  /// Label for Nether Crimson biome
+  ///
+  /// In en, this message translates to:
+  /// **'Nether Crimson'**
+  String get pixelBiomeNetherLabel;
+
+  /// Subtitle for Nether Crimson biome
+  ///
+  /// In en, this message translates to:
+  /// **'Ancient Portal & Fortress'**
+  String get pixelBiomeNetherSubtitle;
+
+  /// Label for End Void biome
+  ///
+  /// In en, this message translates to:
+  /// **'End Void'**
+  String get pixelBiomeEndLabel;
+
+  /// Subtitle for End Void biome
+  ///
+  /// In en, this message translates to:
+  /// **'End Crystals & Dragon Egg'**
+  String get pixelBiomeEndSubtitle;
+
+  /// Section label for selecting a custom server pixel icon
+  ///
+  /// In en, this message translates to:
+  /// **'SERVER PIXEL ICON'**
+  String get serverPixelIconSection;
+
+  /// Short label for Grass server icon
+  ///
+  /// In en, this message translates to:
+  /// **'Grass'**
+  String get serverIconGrass;
+
+  /// Short label for Campfire server icon
+  ///
+  /// In en, this message translates to:
+  /// **'Camp'**
+  String get serverIconCampfire;
+
+  /// Short label for Lantern server icon
+  ///
+  /// In en, this message translates to:
+  /// **'Lantern'**
+  String get serverIconLantern;
+
+  /// Short label for Chest server icon
+  ///
+  /// In en, this message translates to:
+  /// **'Chest'**
+  String get serverIconChest;
+
+  /// Short label for Enchanted Book server icon
+  ///
+  /// In en, this message translates to:
+  /// **'Book'**
+  String get serverIconBook;
+
+  /// Short label for Diamond Sword server icon
+  ///
+  /// In en, this message translates to:
+  /// **'Sword'**
+  String get serverIconSword;
+
+  /// Short label for Diamond Pickaxe server icon
+  ///
+  /// In en, this message translates to:
+  /// **'Pickaxe'**
+  String get serverIconPickaxe;
+
+  /// Short label for Golden Crown server icon
+  ///
+  /// In en, this message translates to:
+  /// **'Crown'**
+  String get serverIconCrown;
+
+  /// Short label for Nether Portal server icon
+  ///
+  /// In en, this message translates to:
+  /// **'Portal'**
+  String get serverIconPortal;
+
+  /// Short label for Creeper server icon
+  ///
+  /// In en, this message translates to:
+  /// **'Creeper'**
+  String get serverIconCreeper;
 }
 
 class _AppLocalizationsDelegate

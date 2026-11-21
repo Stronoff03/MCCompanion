@@ -40,6 +40,7 @@ class DesktopSupportScreen extends StatelessWidget {
             subtitle: topic.subtitle,
             icon: topic.icon,
             rowIcon: topic.rowIcon,
+            pixelIconFrame: topic.pixelIconFrame,
             color: topic.color,
             content: (_) => StepContent(body: topic.body, color: topic.color),
           ),

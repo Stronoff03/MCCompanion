@@ -9,6 +9,7 @@ import '../../theme/app_theme.dart';
 import '../../design/design.dart';
 import '../../services/auth_service.dart';
 import '../../widgets/components/app_toast.dart';
+import '../../widgets/pixel_art/pixel_art.dart';
 import '../../theme/app_tokens.dart';
 
 class ProfileNotLoggedInView extends StatefulWidget {
@@ -216,26 +217,51 @@ class ProfileNotLoggedInViewState extends State<ProfileNotLoggedInView> {
   Widget build(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.all(24),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 440),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+          constraints: const BoxConstraints(maxWidth: 460),
+          child: PixelFrame(
+            notch: 4.0,
+            showRivets: true,
+            fillColor: DsColor.surface.withValues(alpha: 0.90),
+            borderColor: DsColor.lineStrong,
+            topHighlightColor: Colors.white.withValues(alpha: 0.05),
+            bottomLipColor: Colors.black.withValues(alpha: 0.45),
+            bottomLipHeight: 2.5,
+            padding: const EdgeInsets.all(DsSpace.xl),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
               Align(
                 alignment: Alignment.centerLeft,
-                child: Container(
-                  width: 56,
-                  height: 56,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: DsColor.accent.withValues(alpha: 0.14),
-                    borderRadius: DsRadius.controlR,
-                  ),
-                  child: Icon(
-                    Icons.person_rounded,
-                    color: DsColor.accent,
-                    size: 26,
+                child: PixelFrame(
+                  notch: 3.5,
+                  recessed: true,
+                  fillColor: DsColor.inset,
+                  borderColor: DsColor.accent.withValues(alpha: 0.48),
+                  child: SizedBox(
+                    width: 58,
+                    height: 58,
+                    child: Center(
+                      child: ValueListenableBuilder<bool>(
+                        valueListenable:
+                            PixelArtSettings.instance.effectsEnabled,
+                        builder: (_, effectsOn, _) {
+                          if (!effectsOn) {
+                            return Icon(
+                              Icons.person_rounded,
+                              color: DsColor.accent,
+                              size: 26,
+                            );
+                          }
+                          return const PixelSpriteAnimation(
+                            spec: PixelArtAssets.playerAvatar,
+                            width: 46,
+                            height: 46,
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -376,49 +402,11 @@ class ProfileNotLoggedInViewState extends State<ProfileNotLoggedInView> {
                   if (_supportsGoogle) const SizedBox(height: 12),
                 ],
                 if (_supportsGoogle)
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: DsRadius.controlR,
-                      onTap: (_loading || _googleLoading || _appleLoading)
-                          ? null
-                          : _signInWithGoogle,
-                      child: Container(
-                        height: 48,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: DsColor.surfaceQuiet,
-                          borderRadius: DsRadius.controlR,
-                          border: Border.all(color: DsColor.line),
-                        ),
-                        child: _googleLoading
-                            ? SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: CircularProgressIndicator(
-                                  color: DsColor.textFaint,
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/icons/google_g.svg',
-                                    width: 18,
-                                    height: 18,
-                                  ),
-                                  const SizedBox(width: DsSpace.sm),
-                                  Text(
-                                    AppLocalizations.of(
-                                      context,
-                                    )!.continueWithGoogle,
-                                    style: DsType.bodyStrong,
-                                  ),
-                                ],
-                              ),
-                      ),
-                    ),
+                  _PixelGoogleButton(
+                    loading: _googleLoading,
+                    disabled: _loading || _googleLoading || _appleLoading,
+                    label: AppLocalizations.of(context)!.continueWithGoogle,
+                    onPressed: _signInWithGoogle,
                   ),
               ],
               const SizedBox(height: 14),
@@ -432,7 +420,8 @@ class ProfileNotLoggedInViewState extends State<ProfileNotLoggedInView> {
                   style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
                 ),
               ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -447,11 +436,22 @@ class ProfileNotRegisteredView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 440),
+          child: PixelFrame(
+            notch: 4.0,
+            showRivets: true,
+            fillColor: DsColor.surface.withValues(alpha: 0.90),
+            borderColor: DsColor.lineStrong,
+            topHighlightColor: Colors.white.withValues(alpha: 0.05),
+            bottomLipColor: Colors.black.withValues(alpha: 0.45),
+            bottomLipHeight: 2.5,
+            padding: const EdgeInsets.all(DsSpace.xl),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
             Container(
               width: 64,
               height: 64,
@@ -502,7 +502,156 @@ class ProfileNotRegisteredView extends StatelessWidget {
                 ),
               ),
             ),
-          ],
+            ],
+          ),
+        ),
+      ),
+    ),
+    );
+  }
+}
+
+class _PixelGoogleButton extends StatefulWidget {
+  const _PixelGoogleButton({
+    required this.loading,
+    required this.disabled,
+    required this.label,
+    required this.onPressed,
+  });
+
+  final bool loading;
+  final bool disabled;
+  final String label;
+  final VoidCallback onPressed;
+
+  @override
+  State<_PixelGoogleButton> createState() => _PixelGoogleButtonState();
+}
+
+class _PixelGoogleButtonState extends State<_PixelGoogleButton> {
+  bool _hovered = false;
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final enabled = !widget.disabled;
+    final fillColor = _hovered && enabled
+        ? Color.alphaBlend(
+            Colors.white.withValues(alpha: 0.05),
+            DsColor.surfaceQuiet,
+          )
+        : DsColor.surfaceQuiet;
+    final borderColor = _hovered && enabled
+        ? Color.alphaBlend(
+            Colors.white.withValues(alpha: 0.16),
+            DsColor.lineStrong,
+          )
+        : DsColor.lineStrong;
+
+    return MouseRegion(
+      cursor: enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() {
+        _hovered = false;
+        _pressed = false;
+      }),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTapDown: enabled ? (_) => setState(() => _pressed = true) : null,
+        onTapUp: enabled
+            ? (details) {
+                setState(() => _pressed = false);
+                if (PixelArtSettings.instance.effectsEnabled.value) {
+                  PixelParticleOverlay.burst(
+                    context,
+                    details.globalPosition,
+                    preset: PixelParticlePreset.xpBurst,
+                    count: 5,
+                  );
+                }
+                widget.onPressed();
+              }
+            : null,
+        onTapCancel: enabled ? () => setState(() => _pressed = false) : null,
+        child: AnimatedPadding(
+          duration: const Duration(milliseconds: 80),
+          padding: EdgeInsets.only(
+            top: _pressed ? 2.0 : 0.0,
+            bottom: _pressed ? 0.0 : 2.0,
+          ),
+          child: PixelFrame(
+            notch: 3.5,
+            enableTexture: true,
+            fillColor: fillColor,
+            borderColor: borderColor,
+            topHighlightColor: enabled && !_pressed
+                ? Colors.white.withValues(alpha: 0.09)
+                : null,
+            bottomLipColor: enabled
+                ? Colors.black.withValues(alpha: 0.52)
+                : null,
+            bottomLipHeight: enabled ? (_pressed ? 1.0 : 3.0) : 0,
+            child: SizedBox(
+              height: 46,
+              child: Center(
+                child: widget.loading
+                    ? SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          color: DsColor.textFaint,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          PixelFrame(
+                            notch: 2.0,
+                            recessed: true,
+                            fillColor: DsColor.inset,
+                            borderColor: DsColor.line,
+                            child: SizedBox(
+                              width: 26,
+                              height: 26,
+                              child: Center(
+                                child: ValueListenableBuilder<bool>(
+                                  valueListenable:
+                                      PixelArtSettings.instance.effectsEnabled,
+                                  builder: (_, effectsOn, _) {
+                                    if (!effectsOn) {
+                                      return SvgPicture.asset(
+                                        'assets/icons/google_g.svg',
+                                        width: 16,
+                                        height: 16,
+                                      );
+                                    }
+                                    return const PixelSpriteAnimation(
+                                      spec: PixelArtAssets.googlePixel,
+                                      fixedFrame: 0,
+                                      playing: false,
+                                      width: 18,
+                                      height: 18,
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: DsSpace.sm + 2),
+                          Text(
+                            widget.label,
+                            style: DsType.bodyStrong.copyWith(
+                              color: enabled
+                                  ? DsColor.text
+                                  : DsColor.textDisabled,
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
+            ),
+          ),
         ),
       ),
     );

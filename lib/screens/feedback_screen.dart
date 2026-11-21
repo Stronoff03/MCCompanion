@@ -8,6 +8,7 @@ import '../design/design.dart';
 import '../services/feedback_service.dart';
 import '../services/auth_service.dart';
 import '../widgets/components/app_toast.dart';
+import '../widgets/pixel_art/pixel_art.dart';
 import '../l10n/app_localizations.dart';
 import 'my_feedback_screen.dart';
 
@@ -186,57 +187,88 @@ class _LoginRequiredView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: AppTheme.accent.withValues(alpha: 0.12),
-                borderRadius: DsRadius.cardR,
-                border: Border.all(
-                  color: AppTheme.accent.withValues(alpha: 0.30),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 460),
+          child: PixelFrame(
+            notch: 4.0,
+            showRivets: true,
+            fillColor: DsColor.surface.withValues(alpha: 0.90),
+            borderColor: DsColor.lineStrong,
+            topHighlightColor: Colors.white.withValues(alpha: 0.05),
+            bottomLipColor: Colors.black.withValues(alpha: 0.45),
+            bottomLipHeight: 2.5,
+            padding: const EdgeInsets.all(DsSpace.xl),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                PixelFrame(
+                  notch: 3.5,
+                  recessed: true,
+                  fillColor: DsColor.inset,
+                  borderColor: DsColor.accent.withValues(alpha: 0.48),
+                  child: SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: Center(
+                      child: ValueListenableBuilder<bool>(
+                        valueListenable:
+                            PixelArtSettings.instance.effectsEnabled,
+                        builder: (_, effectsOn, _) {
+                          if (!effectsOn) {
+                            return Icon(
+                              Icons.person_rounded,
+                              size: 28,
+                              color: AppTheme.accent,
+                            );
+                          }
+                          return const PixelSpriteAnimation(
+                            spec: PixelArtAssets.playerAvatar,
+                            width: 48,
+                            height: 48,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              child: Icon(
-                Icons.person_rounded,
-                size: 28,
-                color: AppTheme.accent,
-              ),
+                const SizedBox(height: 20),
+                Text(
+                  l.feedbackLoginRequiredTitle,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: AppTheme.textPrimary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l.feedbackLoginRequiredBody,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: AppTheme.textSecondary,
+                    height: 1.6,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                DsButton(
+                  label: l.feedbackLoginButton,
+                  expand: true,
+                  onPressed: onGoToLogin,
+                ),
+                const SizedBox(height: DsSpace.sm),
+                DsButton(
+                  label: l.feedbackBackToApp,
+                  tone: DsButtonTone.quiet,
+                  size: DsButtonSize.small,
+                  onPressed: onBack,
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-            Text(
-              l.feedbackLoginRequiredTitle,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: AppTheme.textPrimary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              l.feedbackLoginRequiredBody,
-              style: TextStyle(
-                fontSize: 13,
-                color: AppTheme.textSecondary,
-                height: 1.6,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            DsButton(label: l.feedbackLoginButton, onPressed: onGoToLogin),
-            const SizedBox(height: DsSpace.sm),
-            DsButton(
-              label: l.feedbackBackToApp,
-              tone: DsButtonTone.quiet,
-              size: DsButtonSize.small,
-              onPressed: onBack,
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -268,18 +300,21 @@ class _Header extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: typeColor.withValues(alpha: 0.12),
-              borderRadius: DsRadius.controlR,
-              border: Border.all(color: typeColor.withValues(alpha: 0.25)),
-            ),
-            child: FaIcon(
-              isBug ? FontAwesomeIcons.bug : FontAwesomeIcons.lightbulb,
-              size: 14,
-              color: typeColor,
+          PixelFrame(
+            notch: 2.5,
+            recessed: true,
+            fillColor: typeColor.withValues(alpha: 0.14),
+            borderColor: typeColor.withValues(alpha: 0.40),
+            child: SizedBox(
+              width: 34,
+              height: 34,
+              child: Center(
+                child: FaIcon(
+                  isBug ? FontAwesomeIcons.bug : FontAwesomeIcons.lightbulb,
+                  size: 14,
+                  color: typeColor,
+                ),
+              ),
             ),
           ),
           const SizedBox(width: 10),
@@ -305,54 +340,57 @@ class _Header extends StatelessWidget {
           if (!embedded)
             ValueListenableBuilder<int>(
               valueListenable: FeedbackService.unreadTickets,
-              builder: (context, unread, _) => Material(
-                color: unread > 0
-                    ? AppTheme.accent.withValues(alpha: 0.14)
-                    : AppTheme.surfaceCard,
-                clipBehavior: Clip.antiAlias,
-                child: InkWell(
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const MyFeedbackScreen()),
+              builder: (context, unread, _) => GestureDetector(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const MyFeedbackScreen()),
+                ),
+                child: PixelFrame(
+                  notch: 2.5,
+                  fillColor: unread > 0
+                      ? DsColor.accent.withValues(alpha: 0.16)
+                      : DsColor.surface.withValues(alpha: 0.90),
+                  borderColor: unread > 0
+                      ? DsColor.accent.withValues(alpha: 0.65)
+                      : DsColor.lineStrong,
+                  bottomLipColor: Colors.black.withValues(alpha: 0.40),
+                  bottomLipHeight: 2.0,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 11,
+                    vertical: 7,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 11,
-                      vertical: 7,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          l.myFeedbackOpenList,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        l.myFeedbackOpenList,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.accent,
+                        ),
+                      ),
+                      if (unread > 0) ...[
+                        const SizedBox(width: 7),
+                        Container(
+                          constraints: const BoxConstraints(minWidth: 17),
+                          height: 17,
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          decoration: BoxDecoration(
                             color: AppTheme.accent,
+                            borderRadius: DsRadius.controlR,
+                          ),
+                          child: Text(
+                            '$unread',
+                            style: const TextStyle(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black,
+                            ),
                           ),
                         ),
-                        if (unread > 0) ...[
-                          const SizedBox(width: 7),
-                          Container(
-                            constraints: const BoxConstraints(minWidth: 17),
-                            height: 17,
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.symmetric(horizontal: 4),
-                            decoration: BoxDecoration(
-                              color: AppTheme.accent,
-                              borderRadius: DsRadius.controlR,
-                            ),
-                            child: Text(
-                              '$unread',
-                              style: const TextStyle(
-                                fontSize: 10.5,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
                       ],
-                    ),
+                    ],
                   ),
                 ),
               ),
@@ -455,13 +493,24 @@ class _FormView extends StatelessWidget {
         16,
         MediaQuery.of(context).padding.bottom + 20,
       ),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: isDesktop ? 560 : double.infinity,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: isDesktop ? 560 : double.infinity,
+          ),
+          child: PixelFrame(
+            notch: 4.0,
+            showRivets: true,
+            fillColor: DsColor.surface.withValues(alpha: 0.90),
+            borderColor: DsColor.lineStrong,
+            topHighlightColor: Colors.white.withValues(alpha: 0.05),
+            bottomLipColor: Colors.black.withValues(alpha: 0.45),
+            bottomLipHeight: 2.5,
+            padding: const EdgeInsets.all(DsSpace.xl),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
             _TypeToggle(value: type, onChanged: onTypeChange),
             const SizedBox(height: 20),
             _Divider(),
@@ -546,7 +595,9 @@ class _FormView extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-          ],
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -570,11 +621,22 @@ class _SuccessView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 460),
+          child: PixelFrame(
+            notch: 4.0,
+            showRivets: true,
+            fillColor: DsColor.surface.withValues(alpha: 0.90),
+            borderColor: DsColor.lineStrong,
+            topHighlightColor: Colors.white.withValues(alpha: 0.05),
+            bottomLipColor: Colors.black.withValues(alpha: 0.45),
+            bottomLipHeight: 2.5,
+            padding: const EdgeInsets.all(DsSpace.xl),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
             Container(
               width: 60,
               height: 60,
@@ -657,7 +719,9 @@ class _SuccessView extends StatelessWidget {
                 style: TextStyle(color: AppTheme.textMuted, fontSize: 13),
               ),
             ),
-          ],
+              ],
+            ),
+          ),
         ),
       ),
     );

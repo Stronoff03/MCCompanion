@@ -9,6 +9,7 @@ import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 import '../services/server_directory_service.dart';
 import '../widgets/components/app_toast.dart';
+import '../widgets/pixel_art/pixel_art.dart';
 import '../util/directory_server.dart';
 
 class DesktopServerListScreen extends StatefulWidget {
@@ -245,45 +246,78 @@ class _DesktopServerListScreenState extends State<DesktopServerListScreen> {
           ),
         ),
         const SizedBox(height: DsSpace.md),
-        _header(l, showVersion: showVersion, showUptime: showUptime),
-        Container(height: 1, color: DsColor.line),
         Expanded(
-          child: _loading
-              ? Center(
-                  child: SizedBox(
-                    width: 22,
-                    height: 22,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 1.8,
-                      color: DsColor.textFaint,
-                    ),
-                  ),
-                )
-              : ListView.builder(
-                  controller: _scroll,
-                  itemCount: _servers.length + (_loadingMore ? 1 : 0),
-                  itemBuilder: (context, i) {
-                    if (i >= _servers.length) {
-                      return const Padding(
-                        padding: EdgeInsets.all(DsSpace.lg),
-                        child: Center(
-                          child: SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(strokeWidth: 1.8),
-                          ),
-                        ),
-                      );
-                    }
-                    return _row(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              DsSpace.xl,
+              0,
+              DsSpace.xl,
+              DsSpace.lg,
+            ),
+            child: PixelFrame(
+              notch: 4.0,
+              showRivets: true,
+              fillColor: DsColor.surface.withValues(alpha: 0.90),
+              borderColor: DsColor.lineStrong,
+              topHighlightColor: Colors.white.withValues(alpha: 0.05),
+              bottomLipColor: Colors.black.withValues(alpha: 0.45),
+              bottomLipHeight: 2.5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    color: DsColor.inset.withValues(alpha: 0.55),
+                    child: _header(
                       l,
-                      _servers[i],
-                      i + 1,
                       showVersion: showVersion,
                       showUptime: showUptime,
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                  Container(height: 1, color: DsColor.line),
+                  Expanded(
+                    child: _loading
+                        ? Center(
+                            child: SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 1.8,
+                                color: DsColor.textFaint,
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            controller: _scroll,
+                            itemCount: _servers.length + (_loadingMore ? 1 : 0),
+                            itemBuilder: (context, i) {
+                              if (i >= _servers.length) {
+                                return const Padding(
+                                  padding: EdgeInsets.all(DsSpace.lg),
+                                  child: Center(
+                                    child: SizedBox(
+                                      width: 18,
+                                      height: 18,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 1.8,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                              return _row(
+                                l,
+                                _servers[i],
+                                i + 1,
+                                showVersion: showVersion,
+                                showUptime: showUptime,
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ],
     );
@@ -294,26 +328,41 @@ class _DesktopServerListScreenState extends State<DesktopServerListScreen> {
     return Material(
       color: Colors.transparent,
       child: InkWell(
+        onTapDown: (details) {
+          if (PixelArtSettings.instance.effectsEnabled.value) {
+            PixelParticleOverlay.burst(
+              context,
+              details.globalPosition,
+              preset: PixelParticlePreset.xpBurst,
+              count: 4,
+            );
+          }
+        },
         onTap: () {
           setState(() => _sort = value);
           _load();
         },
-        borderRadius: DsRadius.pillR,
-        child: Container(
+        customBorder: const PixelNotchedBorder(notch: 2.5),
+        child: PixelFrame(
+          notch: 2.5,
+          recessed: !active,
+          fillColor: active
+              ? DsColor.accent.withValues(alpha: 0.16)
+              : DsColor.inset,
+          borderColor: active
+              ? DsColor.accent.withValues(alpha: 0.65)
+              : DsColor.line,
+          bottomLipColor: active ? Colors.black.withValues(alpha: 0.35) : null,
+          bottomLipHeight: active ? 2.0 : 0,
           padding: const EdgeInsets.symmetric(
             horizontal: DsSpace.md,
             vertical: DsSpace.sm - 2,
           ),
-          decoration: BoxDecoration(
-            color: active ? DsColor.accent.withValues(alpha: 0.14) : null,
-            borderRadius: DsRadius.pillR,
-            border: Border.all(color: active ? DsColor.accent : DsColor.line),
-          ),
           child: Text(
-            label,
-            style: DsType.caption.copyWith(
+            label.toUpperCase(),
+            style: DsType.pixelTag.copyWith(
+              fontSize: 10.5,
               color: active ? DsColor.accent : DsColor.textSoft,
-              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -328,10 +377,10 @@ class _DesktopServerListScreenState extends State<DesktopServerListScreen> {
   }) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        DsSpace.xl,
-        DsSpace.sm,
-        DsSpace.xl,
-        DsSpace.sm,
+        DsSpace.lg,
+        DsSpace.sm + 2,
+        DsSpace.lg,
+        DsSpace.sm + 2,
       ),
       child: Row(
         children: [
@@ -389,9 +438,11 @@ class _DesktopServerListScreenState extends State<DesktopServerListScreen> {
         child: Container(
           decoration: BoxDecoration(
             color: selected
-                ? DsColor.accent.withValues(alpha: 0.10)
+                ? DsColor.accent.withValues(alpha: 0.12)
                 : hovered
-                ? DsColor.surface
+                ? Colors.white.withValues(alpha: 0.045)
+                : rank.isEven
+                ? Colors.black.withValues(alpha: 0.08)
                 : null,
             border: Border(
               left: BorderSide(
@@ -402,9 +453,9 @@ class _DesktopServerListScreenState extends State<DesktopServerListScreen> {
             ),
           ),
           padding: const EdgeInsets.fromLTRB(
-            DsSpace.xl - 2,
+            DsSpace.lg - 2,
             DsSpace.sm + 2,
-            DsSpace.xl,
+            DsSpace.lg,
             DsSpace.sm + 2,
           ),
           child: Row(
@@ -461,10 +512,13 @@ class _DesktopServerListScreenState extends State<DesktopServerListScreen> {
               if (showUptime)
                 SizedBox(
                   width: 72,
-                  child: Text(
-                    '${server.uptime}%',
-                    textAlign: TextAlign.right,
-                    style: DsType.mono,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      _PixelSignalBars(uptimePercent: server.uptime.toDouble()),
+                      const SizedBox(width: 6),
+                      Text('${server.uptime}%', style: DsType.mono),
+                    ],
                   ),
                 ),
               SizedBox(
@@ -829,6 +883,51 @@ class _VoteDialogState extends State<_VoteDialog> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Crisp 5-bar Minecraft multiplayer signal strength indicator painted on a
+/// 2px pixel grid so server rows read unmistakably like a Minecraft browser.
+class _PixelSignalBars extends StatelessWidget {
+  const _PixelSignalBars({required this.uptimePercent});
+
+  final double uptimePercent;
+
+  @override
+  Widget build(BuildContext context) {
+    final int activeBars = uptimePercent >= 98
+        ? 5
+        : uptimePercent >= 90
+        ? 4
+        : uptimePercent >= 75
+        ? 3
+        : uptimePercent >= 50
+        ? 2
+        : 1;
+    final Color barColor = activeBars >= 4
+        ? DsColor.success
+        : activeBars >= 2
+        ? DsColor.warning
+        : DsColor.danger;
+
+    return SizedBox(
+      width: 18,
+      height: 12,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          for (var i = 1; i <= 5; i++)
+            Container(
+              width: 2.5,
+              height: 2.0 + i * 2.0,
+              color: i <= activeBars
+                  ? barColor
+                  : DsColor.textDisabled.withValues(alpha: 0.35),
+            ),
+        ],
       ),
     );
   }

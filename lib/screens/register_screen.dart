@@ -9,6 +9,7 @@ import '../theme/app_theme.dart';
 import '../design/design.dart';
 import '../services/user_service.dart';
 import '../services/push_notification_service.dart';
+import '../widgets/pixel_art/pixel_art.dart';
 
 class RegisterScreen extends StatefulWidget {
   final VoidCallback onRegistered;
@@ -96,20 +97,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: 40),
-                  Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: AppTheme.accent.withValues(alpha: 0.12),
-                      borderRadius: DsRadius.cardR,
-                      border: Border.all(
-                        color: AppTheme.accent.withValues(alpha: 0.30),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: PixelFrame(
+                      notch: 3.5,
+                      recessed: true,
+                      fillColor: DsColor.inset,
+                      borderColor: DsColor.accent.withValues(alpha: 0.48),
+                      child: SizedBox(
+                        width: 64,
+                        height: 64,
+                        child: Center(
+                          child: ValueListenableBuilder<bool>(
+                            valueListenable:
+                                PixelArtSettings.instance.effectsEnabled,
+                            builder: (_, effectsOn, _) {
+                              if (!effectsOn) {
+                                return Icon(
+                                  Icons.person_add_rounded,
+                                  color: AppTheme.accent,
+                                  size: 28,
+                                );
+                              }
+                              return const PixelSpriteAnimation(
+                                spec: PixelArtAssets.playerAvatar,
+                                width: 50,
+                                height: 50,
+                              );
+                            },
+                          ),
+                        ),
                       ),
-                    ),
-                    child: Icon(
-                      Icons.person_add_rounded,
-                      color: AppTheme.accent,
-                      size: 28,
                     ),
                   ),
                   const SizedBox(height: 20),

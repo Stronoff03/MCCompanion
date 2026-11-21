@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../layout/bar_inset.dart';
 import '../../widgets/components/update_banner.dart';
+import '../../widgets/pixel_art/pixel_art.dart';
 import '../navigation/bottom_nav_bar.dart';
 import '../navigation/app_sidebar.dart';
 
@@ -19,6 +21,7 @@ class MobileShell extends StatelessWidget {
   final Widget page;
   final Widget? notice;
   final Widget consoleOverlay;
+  final ValueListenable<bool>? broadcasting;
 
   const MobileShell({
     super.key,
@@ -35,6 +38,7 @@ class MobileShell extends StatelessWidget {
     required this.page,
     required this.notice,
     required this.consoleOverlay,
+    this.broadcasting,
   });
 
   Widget _withBarInset(BuildContext context) {
@@ -51,67 +55,77 @@ class MobileShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final safeBottom = MediaQuery.paddingOf(context).bottom;
+    final groundLift = (safeBottom < 8 ? 8.0 : safeBottom) + 58.0;
+
     return Stack(
       children: [
         background,
-        Scaffold(
-          key: scaffoldKey,
-          backgroundColor: Colors.transparent,
-          drawer: drawer,
-          drawerEnableOpenDragGesture: false,
-          body: Stack(
-            children: [
-              SafeArea(
-                bottom: false,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ClipRect(
-                      child: SizedBox(
-                        height: AppTopBar.height + topBarOffset,
-                        child: OverflowBox(
-                          alignment: Alignment.topCenter,
-                          minHeight: AppTopBar.height,
-                          maxHeight: AppTopBar.height,
-                          child: AppTopBar(
-                            onMenu: () =>
-                                scaffoldKey.currentState?.openDrawer(),
-                            profileActive: profileActive,
-                            onProfile: onProfile,
+        Positioned.fill(
+          child: NightHorizonBackdrop(
+            broadcasting: broadcasting,
+            groundBottomInset: groundLift,
+            child: Scaffold(
+              key: scaffoldKey,
+              backgroundColor: Colors.transparent,
+              drawer: drawer,
+              drawerEnableOpenDragGesture: false,
+              body: Stack(
+                children: [
+                  SafeArea(
+                    bottom: false,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ClipRect(
+                          child: SizedBox(
+                            height: AppTopBar.height + topBarOffset,
+                            child: OverflowBox(
+                              alignment: Alignment.topCenter,
+                              minHeight: AppTopBar.height,
+                              maxHeight: AppTopBar.height,
+                              child: AppTopBar(
+                                onMenu: () =>
+                                    scaffoldKey.currentState?.openDrawer(),
+                                profileActive: profileActive,
+                                onProfile: onProfile,
+                                broadcasting: broadcasting,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        const UpdateBanner(),
+                        Expanded(
+                          child: NotificationListener<ScrollNotification>(
+                            onNotification: onPageScroll,
+                            child: _withBarInset(context),
+                          ),
+                        ),
+                      ],
                     ),
-                    const UpdateBanner(),
-                    Expanded(
-                      child: NotificationListener<ScrollNotification>(
-                        onNotification: onPageScroll,
-                        child: _withBarInset(context),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: TweenAnimationBuilder<double>(
-                  duration: animateBottomBar
-                      ? const Duration(milliseconds: 240)
-                      : Duration.zero,
-                  curve: Curves.easeOutCubic,
-                  tween: Tween<double>(end: bottomBarOffset),
-                  builder: (context, offset, child) => Transform.translate(
-                    offset: Offset(0, offset),
-                    child: child,
                   ),
-                  child: bottomBar,
-                ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: TweenAnimationBuilder<double>(
+                      duration: animateBottomBar
+                          ? const Duration(milliseconds: 240)
+                          : Duration.zero,
+                      curve: Curves.easeOutCubic,
+                      tween: Tween<double>(end: bottomBarOffset),
+                      builder: (context, offset, child) => Transform.translate(
+                        offset: Offset(0, offset),
+                        child: child,
+                      ),
+                      child: bottomBar,
+                    ),
+                  ),
+                  ?notice,
+                  consoleOverlay,
+                ],
               ),
-              ?notice,
-              consoleOverlay,
-            ],
+            ),
           ),
         ),
       ],

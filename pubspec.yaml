@@ -52,6 +52,26 @@ flutter:
   assets:
     - assets/icons/google_g.svg
     - assets/images/logo.png
+    - assets/pixel_art/
+  fonts:
+    - family: ChakraPetch
+      fonts:
+        - asset: assets/fonts/ChakraPetch-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/ChakraPetch-Bold.ttf
+          weight: 700
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans-Variable.ttf
+    - family: JetBrainsMono
+      fonts:
+        - asset: assets/fonts/JetBrainsMono-Variable.ttf
+    - family: Silkscreen
+      fonts:
+        - asset: assets/fonts/Silkscreen-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Silkscreen-Bold.ttf
+          weight: 700
 
 msix_config:
   display_name: MCCompanion

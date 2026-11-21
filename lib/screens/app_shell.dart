@@ -59,6 +59,7 @@ import '../widgets/components/swipe_back.dart';
 import '../widgets/components/global_notice_banner.dart';
 import '../widgets/components/update_banner.dart';
 import '../widgets/onboarding/onboarding_wizard.dart';
+import '../widgets/pixel_art/pixel_art.dart';
 import 'package:flutter/services.dart';
 
 const int _pageConnector = 0;
@@ -760,6 +761,8 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
         entries: [
           AppSidebarEntry(
             icon: const Icon(Icons.tune_rounded),
+            pixelSpec: PixelArtAssets.railFooterIcons,
+            pixelFrame: 1,
             label: l.customizeLabel,
             onTap: _showCustomizeSheet,
           ),
@@ -775,16 +778,22 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
         entries: [
           AppSidebarEntry(
             icon: const Icon(Icons.lightbulb_outline_rounded),
+            pixelSpec: PixelArtAssets.guideIcons,
+            pixelFrame: 3,
             label: l.howToUseMenu,
             onTap: _showHowToSheet,
           ),
           AppSidebarEntry(
             icon: const Icon(Icons.help_outline_rounded),
+            pixelSpec: PixelArtAssets.railFooterIcons,
+            pixelFrame: 2,
             label: l.support,
             onTap: _showHelpSheet,
           ),
           AppSidebarEntry(
             icon: const FaIcon(FontAwesomeIcons.bug),
+            pixelSpec: PixelArtAssets.railFooterIcons,
+            pixelFrame: 3,
             label: l.feedbackTileTitle,
             onTap: () => _goTo(_pageFeedback),
           ),
@@ -795,6 +804,8 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
         entries: [
           AppSidebarEntry(
             icon: const Icon(Icons.settings_ethernet_rounded),
+            pixelSpec: PixelArtAssets.railFooterIcons,
+            pixelFrame: 0,
             label: l.relay,
             onTap: _showMoreSheet,
           ),
@@ -1042,6 +1053,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
       bottomBarOffset: _bottomBarOffset,
       animateBottomBar: _bottomBarSnapping,
       profileActive: _pageIndex == _pageProfile,
+      broadcasting: navigationController.broadcasting,
       onProfile: () {
         _loginFromTracker = false;
         _loginFromRp = false;
@@ -1151,6 +1163,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
                 ),
                 onToggleConsole: _toggleConsole,
                 onDismiss: navigationController.hideConsole,
+                broadcasting: navigationController.broadcasting,
                 statusBar: ClientStatusBar(
                   broadcasting: navigationController.broadcasting,
                   consoleOpen: navigationController.consoleOpen,

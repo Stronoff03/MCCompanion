@@ -509,17 +509,27 @@ class _NotLoggedIn extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     return Center(
-      child: DsEmptyState(
-        icon: Icons.lock_outline_rounded,
-        title: loc.trackerSignInRequired,
-        message: loc.trackerSignInSubtitle,
-        action: onLogin == null
-            ? null
-            : DsButton(
-                label: loc.signIn,
-                icon: Icons.login_rounded,
-                onPressed: onLogin,
-              ),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(DsSpace.gutter),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 440),
+          child: DsCard(
+            padding: const EdgeInsets.all(DsSpace.lg),
+            child: DsEmptyState(
+              icon: Icons.lock_outline_rounded,
+              title: loc.trackerSignInRequired,
+              message: loc.trackerSignInSubtitle,
+              action: onLogin == null
+                  ? null
+                  : DsButton(
+                      label: loc.signIn,
+                      icon: Icons.login_rounded,
+                      expand: true,
+                      onPressed: onLogin,
+                    ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -533,16 +543,25 @@ class _EmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     return Center(
-      child: DsEmptyState(
-        icon: Icons.radar_rounded,
-        title: loc.noServersTracked,
-        message: loc.trackerEmptySubtitle,
-        action: DsButton(
-          label: loc.addServer,
-          icon: Icons.add_rounded,
-          tone: DsButtonTone.neutral,
-          size: DsButtonSize.small,
-          onPressed: onAdd,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(DsSpace.gutter),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 440),
+          child: DsCard(
+            padding: const EdgeInsets.all(DsSpace.lg),
+            child: DsEmptyState(
+              icon: Icons.radar_rounded,
+              title: loc.noServersTracked,
+              message: loc.trackerEmptySubtitle,
+              action: DsButton(
+                label: loc.addServer,
+                icon: Icons.add_rounded,
+                tone: DsButtonTone.neutral,
+                size: DsButtonSize.small,
+                onPressed: onAdd,
+              ),
+            ),
+          ),
         ),
       ),
     );

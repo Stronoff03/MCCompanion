@@ -2098,4 +2098,130 @@ class AppLocalizationsSw extends AppLocalizations {
   @override
   String get feedbackRpNotice =>
       'Hatujibu ripoti kuhusu resource pack. Baadhi ya pack hazifanyi kazi tu, na baadhi ya seva hukataa pack maalum.';
+
+  @override
+  String get pixelStatusReady => 'TAYARI';
+
+  @override
+  String get pixelStatusPortalActive => 'PORTAL HAI';
+
+  @override
+  String get relayRegionEuropeTag => 'ULAYA • EU';
+
+  @override
+  String get relayRegionAmericaTag => 'AMERIKA • US';
+
+  @override
+  String get relayRegionDefaultTag => 'SEVA YA RELAY';
+
+  @override
+  String get pixelAtmosphereSection => 'HALI YA PIKSELI';
+
+  @override
+  String get pixelAnimationsTitle => 'Uhuishaji wa Pikseli';
+
+  @override
+  String get pixelAnimationsSubtitle =>
+      'Mandhari hai ya upeo wa macho, aikoni maalum za pikseli, alama na athari za portal';
+
+  @override
+  String get pixelAmbientBeesTitle => 'Nyuki wa Mandhari';
+
+  @override
+  String get pixelAmbientBeesSubtitle =>
+      'Nyuki shirikishi wa Minecraft anayeruka kwa utulivu kwenye nafasi wazi';
+
+  @override
+  String get pixelAutoTimeTitle =>
+      'Mandharinyuma ya kiotomatiki kulingana na saa';
+
+  @override
+  String pixelAutoTimeActiveSubtitle(String biome) {
+    return 'Hubadilika kiotomatiki kwa saa · Sasa: $biome';
+  }
+
+  @override
+  String get pixelAutoTimeInactiveSubtitle =>
+      'Hubadilika kiotomatiki kati ya Alfajiri, Mchana, Machweo na Usiku';
+
+  @override
+  String get pixelBiomeSection => 'BIOME YA MANDHARINYUMA';
+
+  @override
+  String get pixelBiomeAutoHint => '· Kiotomatiki (chagua ili kufunga)';
+
+  @override
+  String get pixelBiomeAutoLabel => 'Wakati wa Siku';
+
+  @override
+  String get pixelBiomeAutoSubtitle => 'Alfajiri, mchana, jioni, usiku';
+
+  @override
+  String get pixelBiomeMorningLabel => 'Alfajiri ya Asubuhi';
+
+  @override
+  String get pixelBiomeMorningSubtitle => 'Mawio & Kijiji chenye Ukungu';
+
+  @override
+  String get pixelBiomeDaylightLabel => 'Bonde la Mchana';
+
+  @override
+  String get pixelBiomeDaylightSubtitle => 'Mawingu & Kinu cha Upepo';
+
+  @override
+  String get pixelBiomeSunsetLabel => 'Kijiji cha Machweo';
+
+  @override
+  String get pixelBiomeSunsetSubtitle => 'Jioni & Mnara wa Kengele';
+
+  @override
+  String get pixelBiomeNightLabel => 'Msitu wa Usiku';
+
+  @override
+  String get pixelBiomeNightSubtitle => 'Piramidi ya Mnara & Ziwa';
+
+  @override
+  String get pixelBiomeNetherLabel => 'Nether Nyekundu';
+
+  @override
+  String get pixelBiomeNetherSubtitle => 'Portal ya Kale & Ngome';
+
+  @override
+  String get pixelBiomeEndLabel => 'Utupu wa End';
+
+  @override
+  String get pixelBiomeEndSubtitle => 'Fuwele za End & Yai la Joka';
+
+  @override
+  String get serverPixelIconSection => 'AIKONI YA PIKSELI YA SEVA';
+
+  @override
+  String get serverIconGrass => 'Nyasi';
+
+  @override
+  String get serverIconCampfire => 'Moto';
+
+  @override
+  String get serverIconLantern => 'Taa';
+
+  @override
+  String get serverIconChest => 'Sanduku';
+
+  @override
+  String get serverIconBook => 'Kitabu';
+
+  @override
+  String get serverIconSword => 'Upanga';
+
+  @override
+  String get serverIconPickaxe => 'Sururu';
+
+  @override
+  String get serverIconCrown => 'Taji';
+
+  @override
+  String get serverIconPortal => 'Portal';
+
+  @override
+  String get serverIconCreeper => 'Creeper';
 }

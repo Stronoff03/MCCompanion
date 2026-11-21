@@ -8,9 +8,9 @@ import '../../l10n/app_localizations.dart';
 import '../../services/navigation_controller.dart';
 import '../../services/home_customization_service.dart';
 import '../../constants/app_constants.dart';
+import '../../design/design.dart';
 import '../../theme/app_theme.dart';
-import '../../widgets/components/app_sheet.dart';
-import '../../theme/app_tokens.dart';
+import '../../widgets/pixel_art/pixel_art.dart';
 
 class BottomGlassSimpleNavBar extends StatelessWidget {
   final VoidCallback? onConnectorTap;
@@ -263,52 +263,88 @@ class MoreSheetContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppSheet(
-      onClose: onClose,
-      maxHeightFactor: 0.85,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-            child: Row(
-              children: [
-                Container(
-                  width: 38,
-                  height: 38,
-                  decoration: BoxDecoration(
-                    color: AppTheme.accent.withValues(alpha: 0.12),
-                    borderRadius: AppRadius.small,
-                    border: Border.all(
-                      color: AppTheme.accent.withValues(alpha: 0.25),
-                    ),
-                  ),
-                  child: Center(
-                    child: FaIcon(
-                      FontAwesomeIcons.ellipsis,
-                      color: AppTheme.accent,
-                      size: 15,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  loc.relay,
-                  style: TextStyle(
-                    color: AppTheme.textPrimary,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Flexible(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+    final bottomInset = MediaQuery.viewPaddingOf(context).bottom;
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          DsSpace.lg,
+          DsSpace.lg,
+          DsSpace.lg,
+          DsSpace.lg + bottomInset,
+        ),
+        child: Center(
+          heightFactor: 1.0,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 560),
+            child: PixelFrame(
+              notch: 5.0,
+              showRivets: true,
+              enableTexture: true,
+              fillColor: DsColor.surface,
+              borderColor: DsColor.accent.withValues(alpha: 0.48),
+              topHighlightColor: DsColor.accent.withValues(alpha: 0.24),
+              bottomLipColor: Colors.black.withValues(alpha: 0.55),
+              bottomLipHeight: 3.5,
+              rivetColor: DsColor.accent.withValues(alpha: 0.55),
+              padding: const EdgeInsets.all(DsSpace.xl),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Row(
+                    children: [
+                      PixelFrame(
+                        notch: 3.0,
+                        recessed: true,
+                        fillColor: DsColor.inset,
+                        borderColor: DsColor.accent.withValues(alpha: 0.45),
+                        padding: const EdgeInsets.all(7),
+                        child: ValueListenableBuilder<bool>(
+                          valueListenable:
+                              PixelArtSettings.instance.effectsEnabled,
+                          builder: (_, effectsOn, _) {
+                            if (!effectsOn) {
+                              return Icon(
+                                Icons.settings_ethernet_rounded,
+                                color: DsColor.accent,
+                                size: 20,
+                              );
+                            }
+                            return const PixelSpriteAnimation(
+                              spec: PixelArtAssets.railFooterIcons,
+                              fixedFrame: 0,
+                              playing: false,
+                              scale: 1.5,
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: DsSpace.md),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(loc.relay, style: DsType.title),
+                            const SizedBox(height: 2),
+                            Text(
+                              loc.nldServerLabelShort.toUpperCase(),
+                              style: DsType.pixelTag.copyWith(fontSize: 10),
+                            ),
+                          ],
+                        ),
+                      ),
+                      DsIconButton(
+                        icon: Icons.close_rounded,
+                        size: 34,
+                        onPressed: onClose,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: DsSpace.md),
+                  const DsDivider(),
+                  const SizedBox(height: DsSpace.lg),
                   _RegionSelector(
                     selectedIp: selectedRelayIp,
                     onChanged: onRelayChanged,
@@ -317,7 +353,7 @@ class MoreSheetContent extends StatelessWidget {
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -328,87 +364,177 @@ class _RegionSelector extends StatelessWidget {
   final void Function(String?) onChanged;
   const _RegionSelector({required this.selectedIp, required this.onChanged});
 
+  String _regionTag(String name, AppLocalizations loc) {
+    final upper = name.toUpperCase();
+    if (upper.contains('EU')) return loc.relayRegionEuropeTag;
+    if (upper.contains('US')) return loc.relayRegionAmericaTag;
+    return loc.relayRegionDefaultTag;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    final loc = AppLocalizations.of(context)!;
+    return Row(
       children: [
-        Text(
-          AppLocalizations.of(context)!.nldServerLabelShort,
-          style: TextStyle(
-            color: AppTheme.textMuted,
-            fontSize: 10,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 1.4,
+        for (var i = 0; i < AppConstants.relayServers.length; i++) ...[
+          if (i > 0) const SizedBox(width: DsSpace.md),
+          Expanded(
+            child: _RelayRegionCard(
+              name: AppConstants.relayServers[i]['name'] as String,
+              ip: AppConstants.relayServers[i]['ip'] as String,
+              tag: _regionTag(
+                AppConstants.relayServers[i]['name'] as String,
+                loc,
+              ),
+              selected:
+                  selectedIp == AppConstants.relayServers[i]['ip'] as String,
+              onTap: () =>
+                  onChanged(AppConstants.relayServers[i]['ip'] as String),
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Row(
-          children: AppConstants.relayServers.map((relay) {
-            final ip = relay['ip'] as String;
-            final name = relay['name'] as String;
-            final isSelected = selectedIp == ip;
-            final isFirst = relay == AppConstants.relayServers.first;
+        ],
+      ],
+    );
+  }
+}
 
-            return Expanded(
-              child: GestureDetector(
-                onTap: () => onChanged(ip),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  margin: EdgeInsets.only(
-                    right: isFirst ? 6 : 0,
-                    left: isFirst ? 0 : 6,
+class _RelayRegionCard extends StatefulWidget {
+  const _RelayRegionCard({
+    required this.name,
+    required this.ip,
+    required this.tag,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String name;
+  final String ip;
+  final String tag;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  State<_RelayRegionCard> createState() => _RelayRegionCardState();
+}
+
+class _RelayRegionCardState extends State<_RelayRegionCard> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final active = widget.selected;
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: GestureDetector(
+        onTapUp: (details) {
+          if (PixelArtSettings.instance.effectsEnabled.value) {
+            PixelParticleOverlay.burst(
+              context,
+              details.globalPosition,
+              preset: PixelParticlePreset.xpBurst,
+              count: 6,
+            );
+          }
+          widget.onTap();
+        },
+        child: PixelFrame(
+          notch: 3.5,
+          recessed: !active && !_hovered,
+          showRivets: active,
+          fillColor: active
+              ? DsColor.accent.withValues(alpha: 0.16)
+              : (_hovered
+                    ? DsColor.surfaceQuiet
+                    : DsColor.inset),
+          borderColor: active
+              ? DsColor.accent.withValues(alpha: 0.78)
+              : (_hovered ? DsColor.lineStrong : DsColor.line),
+          topHighlightColor: active
+              ? DsColor.accent.withValues(alpha: 0.30)
+              : null,
+          bottomLipColor: active || _hovered
+              ? Colors.black.withValues(alpha: 0.42)
+              : null,
+          bottomLipHeight: active ? 3.0 : (_hovered ? 2.0 : 0),
+          rivetColor: DsColor.accent.withValues(alpha: 0.65),
+          padding: const EdgeInsets.all(DsSpace.md + 2),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 7,
+                    height: 7,
+                    color: active ? DsColor.accent : DsColor.textDisabled,
                   ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 13,
-                    horizontal: 12,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? AppTheme.accent.withValues(alpha: 0.10)
-                        : AppTheme.surfaceRaised,
-                    borderRadius: AppRadius.medium,
-                    border: Border.all(
-                      color: isSelected
-                          ? AppTheme.accent.withValues(alpha: 0.45)
-                          : AppTheme.borderGray,
-                      width: isSelected ? 1.5 : 1.0,
+                  const SizedBox(width: DsSpace.sm),
+                  Expanded(
+                    child: Text(
+                      widget.tag,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: DsType.pixelTag.copyWith(
+                        fontSize: 9.5,
+                        color: active ? DsColor.accent : DsColor.textFaint,
+                      ),
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 7,
-                        height: 7,
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? AppTheme.brand
-                              : AppTheme.textDisabled,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 7),
-                      Text(
-                        name,
-                        style: TextStyle(
-                          color: isSelected
-                              ? AppTheme.textPrimary
-                              : AppTheme.textSecondary,
-                          fontWeight: isSelected
-                              ? FontWeight.w700
-                              : FontWeight.w400,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
+                  _RelaySignalBars(active: active),
+                ],
+              ),
+              const SizedBox(height: DsSpace.sm),
+              Text(
+                widget.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: DsType.heading.copyWith(
+                  fontSize: 15,
+                  color: active ? DsColor.text : DsColor.textSoft,
                 ),
               ),
-            );
-          }).toList(),
+              const SizedBox(height: 3),
+              Text(
+                widget.ip,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: DsType.mono.copyWith(
+                  fontSize: 11,
+                  color: DsColor.textFaint,
+                ),
+              ),
+            ],
+          ),
         ),
-      ],
+      ),
+    );
+  }
+}
+
+class _RelaySignalBars extends StatelessWidget {
+  const _RelaySignalBars({required this.active});
+
+  final bool active;
+
+  @override
+  Widget build(BuildContext context) {
+    final barColor = active
+        ? DsColor.success
+        : DsColor.textDisabled.withValues(alpha: 0.55);
+    return SizedBox(
+      width: 15,
+      height: 11,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          for (var i = 1; i <= 4; i++)
+            Container(width: 2.5, height: 2.0 + i * 2.2, color: barColor),
+        ],
+      ),
     );
   }
 }

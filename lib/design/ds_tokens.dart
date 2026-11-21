@@ -21,10 +21,10 @@ class DsSpace {
 class DsRadius {
   const DsRadius._();
 
-  static const double control = 14;
-  static const double card = 18;
-  static const double sheet = 24;
-  static const double pill = 999;
+  static const double control = 4;
+  static const double card = 4;
+  static const double sheet = 6;
+  static const double pill = 4;
 
   static BorderRadius get controlR => BorderRadius.circular(control);
   static BorderRadius get cardR => BorderRadius.circular(card);
@@ -74,39 +74,44 @@ class DsType {
   const DsType._();
 
   static TextStyle get display => TextStyle(
+    fontFamily: 'ChakraPetch',
     color: DsColor.text,
     fontSize: 28,
-    height: 1.15,
+    height: 1.12,
     fontWeight: FontWeight.w700,
-    letterSpacing: -0.6,
+    letterSpacing: 0.2,
   );
 
   static TextStyle get title => TextStyle(
+    fontFamily: 'ChakraPetch',
     color: DsColor.text,
-    fontSize: 20,
-    height: 1.2,
+    fontSize: 21,
+    height: 1.18,
     fontWeight: FontWeight.w700,
-    letterSpacing: -0.3,
+    letterSpacing: 0.2,
   );
 
   static TextStyle get heading => TextStyle(
+    fontFamily: 'ChakraPetch',
     color: DsColor.text,
-    fontSize: 16,
-    height: 1.25,
+    fontSize: 16.5,
+    height: 1.22,
     fontWeight: FontWeight.w600,
-    letterSpacing: -0.1,
+    letterSpacing: 0.25,
   );
 
   static TextStyle get body => TextStyle(
+    fontFamily: 'PlusJakartaSans',
     color: DsColor.text,
-    fontSize: 15,
-    height: 1.35,
+    fontSize: 14.5,
+    height: 1.38,
     fontWeight: FontWeight.w500,
   );
 
   static TextStyle get bodyStrong => body.copyWith(fontWeight: FontWeight.w600);
 
   static TextStyle get label => TextStyle(
+    fontFamily: 'PlusJakartaSans',
     color: DsColor.textSoft,
     fontSize: 13,
     height: 1.3,
@@ -114,17 +119,37 @@ class DsType {
   );
 
   static TextStyle get caption => TextStyle(
+    fontFamily: 'PlusJakartaSans',
     color: DsColor.textFaint,
-    fontSize: 12.5,
+    fontSize: 12,
     height: 1.35,
     fontWeight: FontWeight.w500,
   );
 
   static TextStyle get mono => TextStyle(
+    fontFamily: 'JetBrainsMono',
     color: DsColor.textSoft,
-    fontSize: 12.5,
+    fontSize: 12,
     height: 1.3,
     fontWeight: FontWeight.w500,
     fontFeatures: const [FontFeature.tabularFigures()],
+  );
+
+  static TextStyle get pixelBrand => TextStyle(
+    fontFamily: 'Silkscreen',
+    color: DsColor.accent,
+    fontSize: 13,
+    height: 1.15,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.8,
+  );
+
+  static TextStyle get pixelTag => TextStyle(
+    fontFamily: 'JetBrainsMono',
+    color: DsColor.textSoft,
+    fontSize: 10.5,
+    height: 1.2,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.9,
   );
 }

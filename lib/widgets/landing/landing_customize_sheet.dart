@@ -7,6 +7,7 @@ import '../../services/home_customization_service.dart';
 import '../../services/theme_service.dart';
 import '../../design/design.dart';
 import '../../layout/bar_inset.dart';
+import '../pixel_art/pixel_art.dart';
 
 class LandingColorSwatch {
   final Color color;
@@ -153,22 +154,20 @@ class LandingNavEditor extends StatelessWidget {
         .where((f) => !HomeCustomizationService.navSlotBlacklist.contains(f))
         .toList();
 
-    return Container(
+    return PixelFrame(
+      notch: 3.0,
+      recessed: true,
+      fillColor: DsColor.inset.withValues(alpha: 0.86),
+      borderColor: DsColor.line,
       padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceRaised,
-        borderRadius: AppRadius.medium,
-        border: Border.all(color: AppTheme.borderGray),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            label,
-            style: TextStyle(
-              color: AppTheme.textMuted,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+            label.toUpperCase(),
+            style: DsType.pixelTag.copyWith(
+              color: DsColor.textSoft,
+              fontSize: 10.5,
             ),
           ),
           const SizedBox(height: 10),
@@ -178,29 +177,25 @@ class LandingNavEditor extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () => onChanged(null),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 150),
+                child: PixelFrame(
+                  notch: 2.0,
+                  recessed: selected != null,
+                  fillColor: selected == null
+                      ? DsColor.textFaint.withValues(alpha: 0.16)
+                      : DsColor.surfaceQuiet,
+                  borderColor: selected == null
+                      ? DsColor.textSoft
+                      : DsColor.line,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
                     vertical: 7,
-                  ),
-                  decoration: BoxDecoration(
-                    color: selected == null
-                        ? AppTheme.textMuted.withValues(alpha: 0.12)
-                        : AppTheme.surfaceLight,
-                    borderRadius: AppRadius.small,
-                    border: Border.all(
-                      color: selected == null
-                          ? AppTheme.textMuted
-                          : AppTheme.borderGray,
-                    ),
                   ),
                   child: Text(
                     AppLocalizations.of(context)!.none,
                     style: TextStyle(
                       color: selected == null
-                          ? AppTheme.textPrimary
-                          : AppTheme.textMuted,
+                          ? DsColor.text
+                          : DsColor.textFaint,
                       fontWeight: selected == null
                           ? FontWeight.w600
                           : FontWeight.w400,
@@ -214,25 +209,24 @@ class LandingNavEditor extends StatelessWidget {
                 final color = Color(f.colorValue);
                 return GestureDetector(
                   onTap: () => onChanged(f),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 150),
+                  child: PixelFrame(
+                    notch: 2.0,
+                    recessed: !isSelected,
+                    fillColor: isSelected
+                        ? color.withValues(alpha: 0.18)
+                        : DsColor.surfaceQuiet,
+                    borderColor: isSelected ? color : DsColor.line,
+                    topHighlightColor: isSelected
+                        ? color.withValues(alpha: 0.28)
+                        : null,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 7,
                     ),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? color.withValues(alpha: 0.15)
-                          : AppTheme.surfaceLight,
-                      borderRadius: AppRadius.small,
-                      border: Border.all(
-                        color: isSelected ? color : AppTheme.borderGray,
-                      ),
-                    ),
                     child: Text(
                       f.label(l),
                       style: TextStyle(
-                        color: isSelected ? color : AppTheme.textMuted,
+                        color: isSelected ? color : DsColor.textSoft,
                         fontWeight: isSelected
                             ? FontWeight.w600
                             : FontWeight.w400,
@@ -512,7 +506,24 @@ class LandingCustomizeSheetState extends State<LandingCustomizeSheet> {
   Future<void> _reset() async {
     await HomeCustomizationService.instance.reset();
     await ThemeService.instance.reset();
-    if (mounted) setState(() {});
+    if (!mounted) return;
+    final svc = HomeCustomizationService.instance;
+    final theme = ThemeService.instance;
+    setState(() {
+      _navOuter = svc.navOuter;
+      _navFar = svc.navFar;
+      _navLeft = svc.navLeft;
+      _navRight = svc.navRight;
+      _accent = theme.accent;
+      _bg = theme.bg;
+      _opacity = theme.opacity;
+      _card = theme.card;
+      _cardOpacity = theme.cardOpacity;
+      _customAccent = theme.customAccent;
+      _customBg = theme.customBg;
+      _customCard = theme.customCard;
+      _customText = theme.customText;
+    });
   }
 
   @override
@@ -559,51 +570,96 @@ class LandingCustomizeSheetState extends State<LandingCustomizeSheet> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (!widget.desktop) ...[
-                      Text(
-                        l.navigationSection,
-                        style: TextStyle(
-                          color: AppTheme.textMuted,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 1.2,
+                      PixelFrame(
+                        notch: 4.0,
+                        showRivets: true,
+                        enableTexture: true,
+                        fillColor: DsColor.surface.withValues(alpha: 0.90),
+                        borderColor: DsColor.lineStrong,
+                        topHighlightColor: Colors.white.withValues(alpha: 0.05),
+                        bottomLipColor: Colors.black.withValues(alpha: 0.45),
+                        bottomLipHeight: 2.5,
+                        padding: const EdgeInsets.all(DsSpace.xl),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              l.navigationSection,
+                              style: DsType.pixelTag.copyWith(
+                                color: DsColor.textFaint,
+                                fontSize: 11,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              l.navFixed,
+                              style: TextStyle(
+                                color: DsColor.textSoft,
+                                fontSize: 12,
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            LandingNavEditor(
+                              label: l.outerSlot,
+                              selected: _navOuter,
+                              onChanged: (f) {
+                                setState(() => _navOuter = f);
+                                HomeCustomizationService.instance
+                                    .setNavOuterLive(f);
+                              },
+                            ),
+                            const SizedBox(height: 10),
+                            LandingNavEditor(
+                              label: l.leftSlot,
+                              selected: _navLeft,
+                              onChanged: (f) {
+                                setState(() => _navLeft = f);
+                                HomeCustomizationService.instance.setNavLeftLive(
+                                  f,
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 10),
+                            LandingNavEditor(
+                              label: l.rightSlot,
+                              selected: _navRight,
+                              onChanged: (f) {
+                                setState(() => _navRight = f);
+                                HomeCustomizationService.instance
+                                    .setNavRightLive(f);
+                              },
+                            ),
+                            const SizedBox(height: 10),
+                            LandingNavEditor(
+                              label: l.farSlot,
+                              selected: _navFar,
+                              onChanged: (f) {
+                                setState(() => _navFar = f);
+                                HomeCustomizationService.instance.setNavFarLive(
+                                  f,
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        l.navFixed,
-                        style: const TextStyle(
-                          color: AppTheme.textDisabled,
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      LandingNavEditor(
-                        label: l.outerSlot,
-                        selected: _navOuter,
-                        onChanged: (f) => setState(() => _navOuter = f),
-                      ),
-                      const SizedBox(height: 10),
-                      LandingNavEditor(
-                        label: l.leftSlot,
-                        selected: _navLeft,
-                        onChanged: (f) => setState(() => _navLeft = f),
-                      ),
-                      const SizedBox(height: 10),
-                      LandingNavEditor(
-                        label: l.rightSlot,
-                        selected: _navRight,
-                        onChanged: (f) => setState(() => _navRight = f),
-                      ),
-                      const SizedBox(height: 10),
-                      LandingNavEditor(
-                        label: l.farSlot,
-                        selected: _navFar,
-                        onChanged: (f) => setState(() => _navFar = f),
-                      ),
-
                       const SizedBox(height: 20),
                     ],
-                    LandingColorPickerSection(
+                    const _PixelAtmosphereCard(),
+                    const SizedBox(height: 24),
+                    PixelFrame(
+                      notch: 4.0,
+                      showRivets: true,
+                      fillColor: DsColor.surface.withValues(alpha: 0.90),
+                      borderColor: DsColor.lineStrong,
+                      topHighlightColor: Colors.white.withValues(alpha: 0.05),
+                      bottomLipColor: Colors.black.withValues(alpha: 0.45),
+                      bottomLipHeight: 2.5,
+                      padding: const EdgeInsets.all(DsSpace.xl),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          LandingColorPickerSection(
                       label: l.accentColorSection,
                       currentColor: _effectiveAccent.withValues(
                         alpha: _opacity,
@@ -918,6 +974,9 @@ class LandingCustomizeSheetState extends State<LandingCustomizeSheet> {
                         ),
                       ],
                     ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -925,6 +984,298 @@ class LandingCustomizeSheetState extends State<LandingCustomizeSheet> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _PixelAtmosphereCard extends StatelessWidget {
+  const _PixelAtmosphereCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    final settings = PixelArtSettings.instance;
+    return DsCard(
+      padding: const EdgeInsets.all(DsSpace.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const PixelSpriteAnimation(
+                spec: PixelArtAssets.grassBlock,
+                scale: 0.85,
+                playing: false,
+                fixedFrame: 0,
+              ),
+              const SizedBox(width: DsSpace.sm),
+              Text(
+                l.pixelAtmosphereSection,
+                style: DsType.caption.copyWith(
+                  letterSpacing: 1.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: DsSpace.md),
+          ValueListenableBuilder<bool>(
+            valueListenable: settings.effectsEnabled,
+            builder: (_, effectsOn, _) {
+              return Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l.pixelAnimationsTitle,
+                              style: DsType.bodyStrong,
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              l.pixelAnimationsSubtitle,
+                              style: DsType.caption,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: DsSpace.md),
+                      DsSwitch(
+                        value: effectsOn,
+                        onChanged: settings.setEffectsEnabled,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: DsSpace.md),
+                  const DsDivider(),
+                  const SizedBox(height: DsSpace.md),
+                  ValueListenableBuilder<bool>(
+                    valueListenable: settings.ambientBeesEnabled,
+                    builder: (_, beesOn, _) {
+                      return Opacity(
+                        opacity: effectsOn ? 1.0 : 0.45,
+                        child: Row(
+                          children: [
+                            const PixelSpriteAnimation(
+                              spec: PixelArtAssets.mcBee,
+                              scale: 0.9,
+                              playing: false,
+                              fixedFrame: 0,
+                            ),
+                            const SizedBox(width: DsSpace.sm),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    l.pixelAmbientBeesTitle,
+                                    style: DsType.bodyStrong,
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    l.pixelAmbientBeesSubtitle,
+                                    style: DsType.caption,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: DsSpace.md),
+                            DsSwitch(
+                              value: beesOn,
+                              onChanged: effectsOn
+                                  ? settings.setAmbientBeesEnabled
+                                  : null,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: DsSpace.md),
+                  const DsDivider(),
+                  const SizedBox(height: DsSpace.md),
+                  ValueListenableBuilder<PixelBiome>(
+                    valueListenable: settings.biome,
+                    builder: (_, currentBiome, _) {
+                      final isAuto = currentBiome == PixelBiome.autoTime;
+                      final effectiveBiome = currentBiome.resolveEffective();
+                      final manualBiomes = PixelBiome.values
+                          .where((b) => b != PixelBiome.autoTime)
+                          .toList(growable: false);
+
+                      return Opacity(
+                        opacity: effectsOn ? 1.0 : 0.45,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        l.pixelAutoTimeTitle,
+                                        style: DsType.bodyStrong,
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        isAuto
+                                            ? l.pixelAutoTimeActiveSubtitle(
+                                                effectiveBiome.localizedLabel(
+                                                  l,
+                                                ),
+                                              )
+                                            : l.pixelAutoTimeInactiveSubtitle,
+                                        style: DsType.caption,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: DsSpace.md),
+                                DsSwitch(
+                                  value: isAuto,
+                                  onChanged: effectsOn
+                                      ? (enabled) {
+                                          settings.setBiome(
+                                            enabled
+                                                ? PixelBiome.autoTime
+                                                : PixelBiome.autoTime
+                                                      .resolveEffective(),
+                                          );
+                                        }
+                                      : null,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: DsSpace.md),
+                            const DsDivider(),
+                            const SizedBox(height: DsSpace.md),
+                            Row(
+                              children: [
+                                Text(
+                                  l.pixelBiomeSection,
+                                  style: DsType.pixelTag.copyWith(fontSize: 10),
+                                ),
+                                if (isAuto) ...[
+                                  const SizedBox(width: DsSpace.sm),
+                                  Flexible(
+                                    child: Text(
+                                      l.pixelBiomeAutoHint,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: DsType.caption.copyWith(
+                                        fontSize: 10.5,
+                                        color: DsColor.textFaint,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                            const SizedBox(height: DsSpace.sm),
+                            AnimatedOpacity(
+                              duration: const Duration(milliseconds: 180),
+                              opacity: isAuto ? 0.72 : 1.0,
+                              child: Wrap(
+                                spacing: DsSpace.sm,
+                                runSpacing: DsSpace.sm,
+                                children: [
+                                  for (final b in manualBiomes)
+                                    GestureDetector(
+                                      onTapUp: effectsOn
+                                          ? (details) {
+                                              settings.setBiome(b);
+                                              PixelParticleOverlay.burst(
+                                                context,
+                                                details.globalPosition,
+                                                preset:
+                                                    PixelParticlePreset.xpBurst,
+                                                count: 5,
+                                              );
+                                            }
+                                          : null,
+                                      child: MouseRegion(
+                                        cursor: effectsOn
+                                            ? SystemMouseCursors.click
+                                            : MouseCursor.defer,
+                                        child: PixelFrame(
+                                          notch: 2.5,
+                                          recessed: effectiveBiome != b,
+                                          fillColor: effectiveBiome == b
+                                              ? b.accent.withValues(
+                                                  alpha: isAuto ? 0.14 : 0.22,
+                                                )
+                                              : DsColor.inset,
+                                          borderColor: effectiveBiome == b
+                                              ? b.accent.withValues(
+                                                  alpha: isAuto ? 0.48 : 0.75,
+                                                )
+                                              : DsColor.line,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: DsSpace.md,
+                                            vertical: DsSpace.sm,
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Container(
+                                                width: 6,
+                                                height: 6,
+                                                color: b.accent,
+                                              ),
+                                              const SizedBox(width: DsSpace.sm),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    b.localizedLabel(l),
+                                                    style: DsType.heading
+                                                        .copyWith(
+                                                          fontSize: 12.5,
+                                                          color:
+                                                              effectiveBiome ==
+                                                                  b
+                                                              ? DsColor.text
+                                                              : DsColor
+                                                                    .textSoft,
+                                                        ),
+                                                  ),
+                                                  Text(
+                                                    b.localizedSubtitle(l),
+                                                    style: DsType.caption
+                                                        .copyWith(
+                                                          fontSize: 10.5,
+                                                          color:
+                                                              DsColor.textFaint,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

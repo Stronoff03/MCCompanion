@@ -18,6 +18,7 @@ import '../util/pack_file_picker.dart';
 import '../util/resource_pack_prefs.dart';
 import '../widgets/components/app_toast.dart';
 import '../widgets/components/swipe_back.dart';
+import '../widgets/pixel_art/pixel_art.dart';
 import '../widgets/resource_pack/rp_active_pack_banner.dart';
 import '../widgets/resource_pack/rp_featured_pack_card.dart';
 import '../widgets/resource_pack/rp_category.dart';
@@ -878,59 +879,90 @@ class _ResourcePackScreenState extends State<ResourcePackScreen> {
       child: GestureDetector(
         onTap: _uploading ? null : _pickAndUpload,
         behavior: HitTestBehavior.opaque,
-        child: AnimatedContainer(
-          duration: DsDuration.fast,
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: DsSpace.xxl),
-          decoration: BoxDecoration(
-            color: active
-                ? DsColor.accent.withValues(alpha: 0.08)
-                : DsColor.surface,
-            borderRadius: DsRadius.cardR,
-            border: Border.all(
-              color: highlighted
-                  ? DsColor.accent.withValues(alpha: 0.6)
-                  : DsColor.line,
-              width: highlighted ? 1.5 : 1,
-            ),
+        child: PixelFrame(
+          notch: 4.5,
+          showRivets: true,
+          enableTexture: true,
+          recessed: !highlighted,
+          fillColor: active
+              ? DsColor.accent.withValues(alpha: 0.14)
+              : DsColor.surface.withValues(alpha: 0.92),
+          borderColor: highlighted
+              ? DsColor.accent.withValues(alpha: 0.72)
+              : DsColor.lineStrong,
+          topHighlightColor: highlighted
+              ? DsColor.accent.withValues(alpha: 0.30)
+              : Colors.white.withValues(alpha: 0.06),
+          bottomLipColor: Colors.black.withValues(alpha: 0.45),
+          bottomLipHeight: 3.0,
+          rivetColor: highlighted ? DsColor.accent : null,
+          padding: const EdgeInsets.symmetric(
+            horizontal: DsSpace.lg,
+            vertical: DsSpace.xxl,
           ),
-          child: _uploading
-              ? Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      width: 28,
-                      height: 28,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.5,
-                        color: DsColor.accent,
+          child: SizedBox(
+            width: double.infinity,
+            child: _uploading
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const PixelSpriteAnimation(
+                        spec: PixelArtAssets.chest,
+                        scale: 2.0,
+                        playing: true,
                       ),
-                    ),
-                    const SizedBox(height: DsSpace.md),
-                    Text(l.rpUploading, style: DsType.label),
-                  ],
-                )
-              : Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      active
-                          ? Icons.file_download_rounded
-                          : Icons.upload_file_rounded,
-                      color: active ? DsColor.accent : DsColor.textFaint,
-                      size: 32,
-                    ),
-                    const SizedBox(height: DsSpace.md),
-                    Text(
-                      active ? l.rpDropToUpload : l.rpUploadButton,
-                      style: DsType.bodyStrong.copyWith(
-                        color: active ? DsColor.accent : DsColor.text,
+                      const SizedBox(height: DsSpace.md),
+                      Text(l.rpUploading, style: DsType.heading),
+                    ],
+                  )
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ValueListenableBuilder<bool>(
+                        valueListenable:
+                            PixelArtSettings.instance.effectsEnabled,
+                        builder: (_, effectsOn, _) {
+                          if (!effectsOn) {
+                            return Icon(
+                              active
+                                  ? Icons.file_download_rounded
+                                  : Icons.upload_file_rounded,
+                              color: active
+                                  ? DsColor.accent
+                                  : DsColor.textFaint,
+                              size: 32,
+                            );
+                          }
+                          return AnimatedScale(
+                            scale: active ? 1.15 : 1.0,
+                            duration: DsDuration.fast,
+                            curve: Curves.easeOutBack,
+                            child: PixelSpriteAnimation(
+                              spec: PixelArtAssets.chest,
+                              scale: 2.1,
+                              playing: active,
+                              fixedFrame: active ? null : 0,
+                            ),
+                          );
+                        },
                       ),
-                    ),
-                    const SizedBox(height: DsSpace.xs),
-                    Text(l.rpUploadHint, style: DsType.caption),
-                  ],
-                ),
+                      const SizedBox(height: DsSpace.md),
+                      Text(
+                        active ? l.rpDropToUpload : l.rpUploadButton,
+                        style: DsType.heading.copyWith(
+                          color: active ? DsColor.accent : DsColor.text,
+                        ),
+                      ),
+                      const SizedBox(height: DsSpace.xs),
+                      Text(l.rpUploadHint, style: DsType.caption),
+                      const SizedBox(height: DsSpace.sm),
+                      DsBadge(
+                        label: '.MCPACK / .ZIP',
+                        color: active ? DsColor.accent : DsColor.textFaint,
+                      ),
+                    ],
+                  ),
+          ),
         ),
       ),
     );
